@@ -48,18 +48,23 @@ jobs:
           # cambia esta linea por:  server-dir: ./
           server-dir: public_html/wp/wp-content/plugins/noticiasbarlovento-core/
 
-          exclude:
-            - '**/.git*'
-            - '**/.git*/**'
-            - '**/.github/**'
-            - '**/node_modules/**'
-            - '**/*.md'
-            # docs/ es documentacion para ejecutar a mano en cPanel.
-            # Nunca debe subirse a la carpeta del plugin.
-            - '**/docs/**'
-            - '**/.editorconfig'
-            - '**/.gitignore'
+          # Las exclusiones van como bloque de texto, un patron por linea.
+          # Si se escriben como lista YAML, Actions rechaza el archivo entero
+          # y el workflow ni siquiera arranca.
+          # docs/ queda afuera: es documentacion para ejecutar a mano en cPanel
+          # y no tiene nada que hacer en la carpeta del plugin.
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/node_modules/**
+            **/docs/**
+            **/*.md
+            **/.editorconfig
+            **/.gitignore
 
           state-name: .ftp-deploy-sync-state.json
-          dry-run: false
+          # Primera corrida: dejar en true, revisar en Actions que las rutas
+          # sean las correctas, y recien ahi volver a false.
+          dry-run: true
           dangerous-clean-slate: false
