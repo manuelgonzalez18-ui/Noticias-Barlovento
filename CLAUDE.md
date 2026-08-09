@@ -61,9 +61,11 @@ public_html/wp/wp-content/plugins/noticiasbarlovento-core/
 
 - NewsExo 8.6 está marcado como vulnerable en WP Toolkit. Pendiente evaluar si
   hay versión parcheada o si toca migrar de tema.
-- El sitio vive en el subdirectorio `/wp/`. En la raíz del dominio hay un sitio
-  estático viejo (carpetas `blog`, `contacto`, `equipo`, `cobertura`, `css`).
-  Falta decidir si se jubila o convive.
+- El sitio vive en el subdirectorio `/wp/`. Se decidió moverlo a la raíz del
+  dominio: el procedimiento está escrito en [docs/migracion-a-raiz.md](docs/migracion-a-raiz.md)
+  y se ejecuta a mano en cPanel, no por el despliegue. Incluye archivar el sitio
+  estático viejo de la raíz (carpetas `blog`, `contacto`, `equipo`, `cobertura`,
+  `css`), que hoy bloquearía las páginas de WordPress con esos mismos slugs.
 - Título y descripción del sitio siguen en los valores por defecto de WordPress
   ("untitled site" / "My WordPress Blog").
 - Alerta de Let's Encrypt en cPanel: revisar estado del certificado SSL.

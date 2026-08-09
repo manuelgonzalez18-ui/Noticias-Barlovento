@@ -85,3 +85,9 @@ el cambio llegue a producción, ya que no hay entorno de staging.
 
 Ver [CLAUDE.md](CLAUDE.md) para el contexto completo de la arquitectura del sitio
 y las restricciones importantes.
+
+Para pasar el sitio de `noticiasbarlovento.com/wp/` a `noticiasbarlovento.com`,
+el procedimiento paso a paso está en
+[docs/migracion-a-raiz.md](docs/migracion-a-raiz.md). Se ejecuta a mano en cPanel
+y wp-admin: son archivos de la raíz del dominio, fuera del alcance de este
+despliegue.

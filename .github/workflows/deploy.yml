@@ -54,6 +54,9 @@ jobs:
             - '**/.github/**'
             - '**/node_modules/**'
             - '**/*.md'
+            # docs/ es documentacion para ejecutar a mano en cPanel.
+            # Nunca debe subirse a la carpeta del plugin.
+            - '**/docs/**'
             - '**/.editorconfig'
             - '**/.gitignore'
 
