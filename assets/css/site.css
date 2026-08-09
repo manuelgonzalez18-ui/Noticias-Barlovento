@@ -1,0 +1,19 @@
+/*
+ * Estilos propios de Noticias Barlovento.
+ *
+ * Se cargan con prioridad 99, despues del tema News Gallery, asi que alcanza
+ * con la especificidad normal para sobrescribir. Evitar !important.
+ *
+ * Al modificar este archivo hay que subir NB_CORE_VERSION en
+ * noticiasbarlovento-core.php o el navegador sirve la copia cacheada.
+ */
+
+/* Variables propias, para no repetir valores por todo el archivo. */
+:root {
+	--nb-core-espacio: 1rem;
+}
+
+/* Marcador: confirma que el CSS del plugin esta cargando en produccion. */
+body.nb-core {
+	--nb-core-cargado: 1;
+}

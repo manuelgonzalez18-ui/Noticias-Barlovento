@@ -1,0 +1,62 @@
+#
+# Despliega el plugin Noticias Barlovento Core al hosting en cada push a main.
+#
+# Secrets requeridos (Settings -> Secrets and variables -> Actions):
+#   FTP_SERVER    -> host FTP que indique cPanel (ftp.noticiasbarlovento.com)
+#   FTP_USERNAME  -> usuario FTP restringido a la carpeta del plugin
+#   FTP_PASSWORD  -> contrasena de ese usuario
+#
+
+name: Desplegar plugin a produccion
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-produccion
+  cancel-in-progress: true
+
+jobs:
+  desplegar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Verificar sintaxis PHP
+        run: |
+          find . -name '*.php' -not -path './vendor/*' -print0 \
+            | xargs -0 -n1 php -l
+
+      - name: Subir por FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+
+          protocol: ftps
+          port: 21
+
+          local-dir: ./
+
+          # Si el usuario FTP esta restringido a la carpeta del plugin,
+          # cambia esta linea por:  server-dir: ./
+          server-dir: public_html/wp/wp-content/plugins/noticiasbarlovento-core/
+
+          exclude:
+            - '**/.git*'
+            - '**/.git*/**'
+            - '**/.github/**'
+            - '**/node_modules/**'
+            - '**/*.md'
+            - '**/.editorconfig'
+            - '**/.gitignore'
+
+          state-name: .ftp-deploy-sync-state.json
+          dry-run: false
+          dangerous-clean-slate: false

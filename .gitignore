@@ -1,0 +1,18 @@
+# Credenciales y configuracion de WordPress: nunca se versionan.
+wp-config.php
+.env
+*.pem
+*.key
+
+# Volcados de base de datos.
+*.sql
+*.sql.gz
+
+# Estado del despliegue por FTP (lo genera la Action en el servidor).
+.ftp-deploy-sync-state.json
+
+# Dependencias y basura del sistema.
+node_modules/
+vendor/
+.DS_Store
+Thumbs.db
