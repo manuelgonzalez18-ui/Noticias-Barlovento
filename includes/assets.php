@@ -46,6 +46,13 @@ function nb_core_encolar_assets() {
 		nb_core_version_asset( 'assets/css/site.css' )
 	);
 
+	wp_enqueue_style(
+		'nb-core-header',
+		NB_CORE_URL . 'assets/css/header.css',
+		array( 'nb-core-site' ),
+		nb_core_version_asset( 'assets/css/header.css' )
+	);
+
 	if ( is_home() || is_front_page() ) {
 		wp_enqueue_style(
 			'nb-core-ticker',
