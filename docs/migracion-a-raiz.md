@@ -3,146 +3,157 @@
 Objetivo: que el portal abra en `https://noticiasbarlovento.com` en lugar de
 `https://noticiasbarlovento.com/wp/`.
 
-Este documento es un procedimiento para ejecutar a mano en cPanel y wp-admin.
-**Nada de esto lo hace el despliegue automático**: los archivos de la raíz del
-dominio están fuera de la carpeta del plugin, así que la Action no los toca.
+Procedimiento para ejecutar a mano en cPanel y wp-admin. **Nada de esto lo hace
+el despliegue automático**: los archivos de la raíz del dominio están fuera de
+la carpeta del plugin, así que la Action no los toca.
 
-> Los archivos de este documento están en bloques de código para copiar y pegar.
-> `docs/` está excluido del despliegue justamente para que nada de acá termine
-> subido por error a la carpeta del plugin.
+## Punto de partida (verificado el 9/8/2026)
+
+Hoy `noticiasbarlovento.com` **no sirve ningún sitio**: no hay `index.php` ni
+`index.html` en la raíz —el del sitio viejo está renombrado a `index.html_`—
+así que Apache devuelve un listado de directorios público.
+
+Eso tiene dos consecuencias:
+
+- La migración es de bajo riesgo: no reemplazamos un sitio que funciona,
+  llenamos un vacío.
+- El listado abierto es un problema de seguridad por sí mismo. Cualquiera ve la
+  estructura del servidor. Se cierra en el paso 3.
 
 ## Método elegido y por qué
 
 WordPress soporta oficialmente esta configuración: **el core se queda donde
-está** (`public_html/wp/`) y solo cambian las URLs públicas. Se conoce como
-*"Giving WordPress its own directory"*.
+está** (`public_html/wp/`) y solo cambian las URLs públicas.
 
 La alternativa —mover los ~2.000 archivos de WordPress a la raíz— no aporta
 nada y multiplica las formas de romper el sitio. No la usamos.
 
-Dos consecuencias importantes de este método, que conviene entender antes de
-empezar:
+Dos consecuencias que conviene entender antes de empezar:
 
 - **Las imágenes no se rompen.** `wp-content` sigue viviendo dentro de `/wp/`,
   y WordPress arma la URL de los archivos subidos a partir de ahí. Las
-  direcciones tipo `https://noticiasbarlovento.com/wp/wp-content/uploads/…`
-  siguen siendo válidas. **No hace falta ningún buscar-y-reemplazar en la base
-  de datos**, que es la parte peligrosa de este tipo de migraciones.
+  direcciones `https://noticiasbarlovento.com/wp/wp-content/uploads/…` siguen
+  siendo válidas. **No hace falta ningún buscar-y-reemplazar en la base de
+  datos**, que es la parte peligrosa de este tipo de migraciones.
 - **La ruta del despliegue no cambia.** El plugin sigue en
-  `public_html/wp/wp-content/plugins/noticiasbarlovento-core/`, así que el
-  `server-dir` del workflow queda igual.
+  `public_html/wp/wp-content/plugins/noticiasbarlovento-core/`.
 
 Lo que sí cambia son los enlaces de las notas: pasan de
-`noticiasbarlovento.com/wp/mi-nota` a `noticiasbarlovento.com/mi-nota`.
-Las direcciones viejas siguen funcionando porque WordPress redirige solo a la
-dirección canónica.
+`noticiasbarlovento.com/wp/mi-nota` a `noticiasbarlovento.com/mi-nota`. Las
+direcciones viejas siguen funcionando porque WordPress redirige a la canónica.
 
-## Antes de empezar
+## Orden de los pasos
 
-### 1. Respaldo completo
+Los archivos van **antes** que el cambio de URLs. Con el `index.php` puesto y
+las URLs todavía en `/wp`, la raíz simplemente redirige a `/wp/`: el sitio no
+se cae en ningún momento. Al revés —URLs primero— la portada queda rota hasta
+que terminás de copiar archivos.
 
-No es opcional. El paso 3 escribe en la base de datos y el paso 4 agrega
-archivos a la raíz.
+## Paso 1: respaldo
 
-- **Backuply** (ya instalado en el sitio): respaldo completo, archivos + base
-  de datos.
-- Además, en cPanel → Asistente de respaldo → descargar el respaldo completo a
-  tu máquina. Un respaldo que vive solo en el mismo servidor no sirve si el
-  problema es el servidor.
+No es opcional. Los pasos siguientes escriben archivos en la raíz y modifican
+la base de datos.
 
-Verificá que el respaldo terminó y que el archivo pesa lo que debería antes de
-seguir.
+- **Backuply** (ya instalado): respaldo completo, archivos + base de datos.
+- Además, cPanel → Asistente de respaldo → **descargarlo a tu máquina**. Un
+  respaldo que vive en el mismo servidor no sirve si el problema es el servidor.
 
-### 2. Decidir qué pasa con el sitio estático viejo
+Verificá que terminó y que el archivo pesa lo que debería antes de seguir.
 
-En la raíz del dominio hay un sitio viejo, con estas carpetas:
-`blog`, `contacto`, `equipo`, `cobertura`, `css`.
+## Paso 2: archivar el sitio estático viejo
 
-**Esto hay que resolverlo sí o sí antes de la migración**, por dos razones
-concretas:
+Apache sirve carpetas y archivos reales **antes** de pasarle el pedido a
+WordPress. Si existe la carpeta `contacto/` y además una página de WordPress con
+el slug `contacto`, gana la carpeta vieja y la página queda inalcanzable.
 
-1. Si en la raíz hay un `index.html`, Apache probablemente lo sirva **antes**
-   que el `index.php` de WordPress, y la portada seguiría mostrando el sitio
-   viejo.
-2. Apache sirve carpetas reales antes de pasarle el pedido a WordPress. Si
-   existe la carpeta `contacto/` y además una página de WordPress con el slug
-   `contacto`, **gana la carpeta vieja** y la página nueva queda inalcanzable.
+Crear `public_html/_sitio-viejo/` y mover ahí dentro:
 
-La forma más segura de resolverlo es archivar, no borrar:
+**Carpetas**
 
 ```
-public_html/index.html      ->  public_html/_sitio-viejo/index.html
-public_html/blog/           ->  public_html/_sitio-viejo/blog/
-public_html/contacto/       ->  public_html/_sitio-viejo/contacto/
-public_html/equipo/         ->  public_html/_sitio-viejo/equipo/
-public_html/cobertura/      ->  public_html/_sitio-viejo/cobertura/
-public_html/css/            ->  public_html/_sitio-viejo/css/
+blog                          images
+blog-single-page-layout       jobs-1-item
+bundles                       js
+cobertura                     legal-notice
+contacto                      modules-1-item
+css                           privacy
+equipo                        real-estate-single-page-layout
+g                             subpage
+                              webcard
 ```
 
-Desde el Administrador de archivos de cPanel: crear la carpeta `_sitio-viejo`
-y mover todo ahí dentro. Queda accesible si hace falta rescatar un texto o una
-foto, y deja de interferir. Una vez que el sitio nuevo esté andando y estable,
-se puede borrar.
+**Archivos**
 
-**Ojo:** no muevas la carpeta `wp/`, ni `cgi-bin`, ni ningún `.well-known`
-(ese último lo usa Let's Encrypt para renovar el certificado SSL).
+```
+index.html_
+api.php
+error_log
+sitemap.xml
+```
 
-## El procedimiento
+`sitemap.xml` es el que más importa de los cuatro, y el más fácil de pasar por
+alto: es el mapa del sitio estático viejo. SiteSEO va a generar el sitemap de
+WordPress en esa misma dirección, y como Apache prefiere el archivo real, Google
+seguiría leyendo el mapa de un sitio que ya no existe. No rompe nada visible
+—se descubre meses después, cuando el posicionamiento no levanta.
 
-### Paso 3: cambiar las direcciones en WordPress
+### Lo que NO se mueve
 
-En **wp-admin → Ajustes → Generales**:
-
-| Campo | Valor nuevo |
+| Qué | Por qué |
 |---|---|
-| Dirección de WordPress (URL) | `https://noticiasbarlovento.com/wp` |
-| Dirección del sitio (URL) | `https://noticiasbarlovento.com` |
+| `wp/` | Es WordPress |
+| `cgi-bin/` | Lo administra cPanel |
+| `php.ini` | Configuración de PHP del hosting |
+| `.well-known/` | Con esta carpeta Let's Encrypt renueva el certificado SSL |
+| `.htaccess` | Ver el paso 3 antes de tocarlo |
+| `noticiasbarlovento.com/` | Es la raíz de la cuenta FTP vieja. Se limpia aparte, cuando se elimine esa cuenta |
+| `classicpress/` | Pendiente de identificar. No choca con ningún slug, así que no frena la migración |
 
-Los dos **sin barra al final**. Guardar.
+## Paso 3: los archivos de la raíz
 
-Apenas guardes, la portada va a dar error hasta que termines el paso 4. Es
-normal y dura lo que tardes en copiar dos archivos. Hacelo en un horario de
-poco tráfico, no un domingo a la noche.
+### 3.1 Si ya existe un `.htaccess` en la raíz
 
-`wp-admin` sigue siendo accesible en `https://noticiasbarlovento.com/wp/wp-admin`
-durante todo el proceso.
+**Leerlo primero.** Puede tener redirecciones del sitio viejo que convenga
+conservar. Renombrarlo a `.htaccess.viejo` en lugar de borrarlo, y revisar
+después si algo de su contenido hay que reponer.
 
-### Paso 4: copiar `index.php` y `.htaccess` a la raíz
+### 3.2 Copiar los dos archivos
 
-**Copiar** (no mover) estos dos archivos de `public_html/wp/` a `public_html/`:
+**Copiar** (no mover) de `public_html/wp/` a `public_html/`:
 
 - `index.php`
 - `.htaccess`
 
-En el Administrador de archivos de cPanel hay que activar *Configuración →
-Mostrar archivos ocultos* para ver el `.htaccess`.
+En el Administrador de archivos hay que activar *Settings → Show Hidden Files*
+para ver el `.htaccess`.
 
-Los originales dentro de `/wp/` tienen que quedar donde están. Si movés en
-lugar de copiar, el sitio se cae.
+Los originales dentro de `/wp/` tienen que quedar donde están. Si movés en lugar
+de copiar, el sitio se cae.
 
-### Paso 5: editar el `index.php` de la raíz
+### 3.3 Editar el `index.php` de la raíz
 
-Abrí `public_html/index.php` y buscá la última línea, que dice:
+Abrir `public_html/index.php`. La última línea dice:
 
 ```php
 require __DIR__ . '/wp-blog-header.php';
 ```
 
-Cambiala por:
+Cambiarla por:
 
 ```php
 require __DIR__ . '/wp/wp-blog-header.php';
 ```
 
-Es el único cambio en ese archivo. Ese `/wp/` de más es lo que le dice a la
-raíz dónde está WordPress.
+Es el único cambio del archivo. Ese `/wp/` de más es lo que le dice a la raíz
+dónde está WordPress.
 
-### Paso 6: dejar el `.htaccess` de la raíz así
-
-Contenido completo de `public_html/.htaccess`:
+### 3.4 Dejar el `.htaccess` de la raíz así
 
 ```apache
-# Servir index.php antes que cualquier index.html que haya quedado dando vueltas.
+# Sin index.php, Apache publicaba el listado completo de la raiz.
+Options -Indexes
+
+# Servir index.php antes que cualquier index.html que quede dando vueltas.
 DirectoryIndex index.php index.html
 
 # BEGIN WordPress
@@ -158,71 +169,80 @@ RewriteRule . /index.php [L]
 # END WordPress
 ```
 
-La línea `DirectoryIndex` es la que evita que un `index.html` olvidado en la
-raíz le gane a WordPress.
+Al terminar este paso, la raíz ya carga WordPress y redirige a `/wp/`. El sitio
+sigue funcionando igual que antes: todavía no cambió ninguna URL.
 
-### Paso 7: regenerar los enlaces permanentes
+## Paso 4: cambiar las direcciones en WordPress
 
-En **wp-admin → Ajustes → Enlaces permanentes**, entrar y darle **Guardar
-cambios** sin modificar nada. Eso obliga a WordPress a reescribir sus reglas de
-reescritura con la ruta nueva.
+**wp-admin → Ajustes → Generales**:
 
-### Paso 8: purgar cachés
+| Campo | Valor nuevo |
+|---|---|
+| Dirección de WordPress (URL) | `https://noticiasbarlovento.com/wp` |
+| Dirección del sitio (URL) | `https://noticiasbarlovento.com` |
 
-- **SpeedyCache**: purgar todo el caché. Si no, vas a estar viendo páginas
-  viejas y creyendo que algo falló.
-- Probá también en una ventana de incógnito, para descartar el caché de tu
-  propio navegador.
+Los dos **sin barra al final**. Guardar.
+
+Este es el momento del cambio. `wp-admin` sigue accesible en
+`https://noticiasbarlovento.com/wp/wp-admin`.
+
+## Paso 5: regenerar enlaces permanentes
+
+**wp-admin → Ajustes → Enlaces permanentes** → entrar y darle **Guardar
+cambios** sin modificar nada. Eso obliga a WordPress a reescribir sus reglas con
+la ruta nueva.
+
+## Paso 6: purgar cachés
+
+- **SpeedyCache**: purgar todo. Si no, vas a ver páginas viejas y creer que algo
+  falló.
+- Probar en una ventana de incógnito, para descartar el caché del navegador.
 
 ## Verificación
 
-Revisá esta lista antes de cantar victoria:
-
 - [ ] `https://noticiasbarlovento.com` abre la portada de WordPress
-- [ ] `https://noticiasbarlovento.com/wp/` sigue abriendo o redirige, sin error
-- [ ] Una nota individual abre bien y su URL ya **no** lleva `/wp/`
-- [ ] Las imágenes de las notas se ven (siguen apuntando a `/wp/wp-content/uploads/`)
+- [ ] Ya **no** aparece el listado de directorios en ninguna carpeta
+- [ ] Una nota individual abre bien y su URL no lleva `/wp/`
+- [ ] Las imágenes de las notas se ven
 - [ ] `https://noticiasbarlovento.com/wp/wp-admin` entra al panel
-- [ ] El candado de SSL aparece en la barra del navegador, sin advertencias
-- [ ] Las categorías y el menú del tema navegan bien
-- [ ] La búsqueda del sitio funciona
-- [ ] Una URL vieja tipo `noticiasbarlovento.com/wp/alguna-nota` redirige a la nueva
+- [ ] El candado de SSL aparece sin advertencias
+- [ ] Categorías, menú y búsqueda funcionan
+- [ ] Una URL vieja `…/wp/alguna-nota` redirige a la nueva
 
 ## Después de la migración
 
-- **SiteSEO**: regenerar el sitemap y verificar que las URLs que lista ya no
-  tengan `/wp/`.
-- **Google Search Console**: enviar el sitemap nuevo. La redirección canónica
-  de WordPress se encarga del resto; Google va a tardar semanas en actualizar
-  el índice, es normal.
-- **Certificado SSL**: en CLAUDE.md figura una alerta pendiente de Let's
-  Encrypt. Conviene resolverla antes o justo después de este cambio, porque
-  ahora la raíz del dominio pasa a ser la puerta de entrada del sitio.
+- **SiteSEO**: regenerar el sitemap y verificar que las URLs ya no tengan `/wp/`.
+- **Google Search Console**: enviar el sitemap nuevo. La redirección canónica se
+  encarga del resto; el índice tarda semanas en actualizarse.
+- **Certificado SSL**: resolver la alerta de Let's Encrypt pendiente en cPanel.
+  Ahora la raíz del dominio es la puerta de entrada del sitio.
+- **Cuenta FTP vieja**: eliminar `admin@noticiasbarlovento.com` y después borrar
+  `public_html/noticiasbarlovento.com/`, que es su raíz y contiene los archivos
+  de un despliegue fallido.
+- **`_sitio-viejo/`**: cuando el sitio nuevo lleve unas semanas estable, se puede
+  borrar. Mientras tanto no molesta.
 
 ## Si algo sale mal
 
-El cambio es reversible y no hay que restaurar el respaldo para volver atrás:
+Es reversible sin restaurar el respaldo:
 
-1. Borrar `public_html/index.php` y `public_html/.htaccess` (los de la raíz;
-   los de `/wp/` no se tocan).
+1. Borrar `public_html/index.php` y `public_html/.htaccess` (los de la raíz; los
+   de `/wp/` no se tocan).
 2. Volver los dos campos de **Ajustes → Generales** a
    `https://noticiasbarlovento.com/wp`.
-3. Sacar el sitio viejo de `_sitio-viejo/` si lo querés de vuelta en la raíz.
+3. Sacar lo que haga falta de `_sitio-viejo/`.
 
-**Si quedaste afuera de wp-admin** —pasa si una de las dos direcciones quedó
-mal escrita—, no se arregla desde el navegador, pero sí por FTP. Editá
-`wp-config.php` y agregá estas dos líneas **antes** de la línea que dice
-`/* That's all, stop editing! */`:
+**Si quedaste afuera de wp-admin** —pasa si una de las direcciones quedó mal
+escrita— se arregla por FTP. Editar `wp-config.php` y agregar estas dos líneas
+**antes** de `/* That's all, stop editing! */`:
 
 ```php
 define( 'WP_HOME', 'https://noticiasbarlovento.com' );
 define( 'WP_SITEURL', 'https://noticiasbarlovento.com/wp' );
 ```
 
-Esas constantes le ganan a lo que esté guardado en la base de datos y te
-devuelven el acceso al panel enseguida. Corregí lo que haga falta y después
-podés sacarlas, o dejarlas: también sirven como forma permanente de fijar las
-direcciones.
+Esas constantes le ganan a lo que esté guardado en la base de datos y devuelven
+el acceso al panel enseguida.
 
-Recordá que `wp-config.php` **no se versiona en este repositorio**: se edita
-directo en el servidor.
+`wp-config.php` **no se versiona en este repositorio**: se edita directo en el
+servidor.
