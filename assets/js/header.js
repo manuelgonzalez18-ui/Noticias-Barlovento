@@ -17,7 +17,7 @@
 		}
 
 		return {
-			url: 'https://higoapp.com/',
+			url: 'https://play.google.com/store/apps/details?id=com.higoapp.ve',
 			logo: ''
 		};
 	}
@@ -94,7 +94,7 @@
 
 		contenedor.className = 'nb-publicidad-superior nb-publicidad-higo';
 		enlace.className = 'nb-publicidad-higo__enlace';
-		enlace.href = higo.url || 'https://higoapp.com/';
+		enlace.href = higo.url || 'https://play.google.com/store/apps/details?id=com.higoapp.ve';
 		enlace.target = '_blank';
 		enlace.rel = 'noopener noreferrer sponsored';
 		enlace.setAttribute( 'aria-label', 'Publicidad de Higo. Muévete y envía con Higo' );
