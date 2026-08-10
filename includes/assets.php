@@ -64,9 +64,24 @@ function nb_core_encolar_assets() {
 		);
 	}
 
+	if ( function_exists( 'nb_core_noticia_esta_activa' ) && nb_core_noticia_esta_activa() ) {
+		wp_enqueue_style(
+			'nb-core-noticia',
+			NB_CORE_URL . 'assets/css/noticia.css',
+			array( 'nb-core-site' ),
+			nb_core_version_asset( 'assets/css/noticia.css' )
+		);
+
+		/* La noticia propia no debe heredar la caja generica del single del tema. */
+		wp_add_inline_style(
+			'nb-core-noticia',
+			'body.nb-core.single.nb-noticia-activa .nb-noticia article.nb-noticia__articulo{background:transparent;border-radius:0;}'
+		);
+	}
+
 	/*
-	 * El JS propio sigue desactivado por defecto: la portada editorial se
-	 * resuelve con PHP y CSS para no agregar coste de ejecucion al navegador.
+	 * El JS propio sigue desactivado por defecto: portada y noticia editorial
+	 * se resuelven con PHP y CSS para no agregar coste de ejecucion al navegador.
 	 */
 	/*
 	wp_enqueue_script(
