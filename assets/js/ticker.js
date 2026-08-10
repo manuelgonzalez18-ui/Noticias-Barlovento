@@ -1,22 +1,60 @@
 /*
- * Movimiento continuo del ticker de Noticias Barlovento.
- * Usa scrollLeft para no competir con las animaciones/transform de NewsExo.
+ * Ticker continuo de Noticias Barlovento.
+ * El contenido viene del plugin y no depende de la categoria de NewsExo.
  */
 ( function () {
 	'use strict';
+
+	function obtenerItems() {
+		if ( window.nbTickerData && Array.isArray( window.nbTickerData.items ) ) {
+			return window.nbTickerData.items.filter( function ( item ) {
+				return item && item.title && item.url;
+			} );
+		}
+
+		return [];
+	}
+
+	function construirTrack( track, items ) {
+		if ( items.length < 2 ) {
+			return Array.prototype.slice.call( track.children );
+		}
+
+		track.textContent = '';
+
+		items.forEach( function ( item ) {
+			var articulo = document.createElement( 'article' );
+			var contenido = document.createElement( 'div' );
+			var enlace = document.createElement( 'a' );
+			var titulo = document.createElement( 'h6' );
+
+			articulo.className = 'news-headline-post nb-ticker-item';
+			contenido.className = 'news-headline-post-content';
+			enlace.href = item.url;
+			titulo.className = 'news-headline-post-title';
+			titulo.textContent = item.title;
+
+			enlace.appendChild( titulo );
+			contenido.appendChild( enlace );
+			articulo.appendChild( contenido );
+			track.appendChild( articulo );
+		} );
+
+		return Array.prototype.slice.call( track.children );
+	}
 
 	function iniciarTicker() {
 		var wrapper = document.querySelector( '.trending-news-area .news-marquee-wrapper' );
 		var track = wrapper ? wrapper.querySelector( '.news-highlights' ) : null;
 
 		if ( ! wrapper || ! track || wrapper.dataset.nbTicker === 'activo' ) {
-			return;
+			return false;
 		}
 
-		var originales = Array.prototype.slice.call( track.children );
+		var originales = construirTrack( track, obtenerItems() );
 
 		if ( originales.length < 2 ) {
-			return;
+			return false;
 		}
 
 		wrapper.dataset.nbTicker = 'activo';
@@ -42,7 +80,7 @@
 
 		var pausado = false;
 		var ultimoTiempo = null;
-		var velocidad = 42; // Pixeles por segundo: legible y continuo.
+		var velocidad = 55;
 		var anchoCiclo = 0;
 
 		function recalcular() {
@@ -50,9 +88,10 @@
 			var ultimo = originales[ originales.length - 1 ];
 
 			if ( primero && ultimo ) {
-				var inicio = primero.offsetLeft;
-				var fin = ultimo.offsetLeft + ultimo.offsetWidth;
-				anchoCiclo = Math.max( 1, fin - inicio );
+				anchoCiclo = Math.max(
+					1,
+					( ultimo.offsetLeft + ultimo.offsetWidth ) - primero.offsetLeft
+				);
 			} else {
 				anchoCiclo = Math.max( 1, track.scrollWidth / 2 );
 			}
@@ -66,7 +105,7 @@
 			var delta = Math.min( 50, tiempo - ultimoTiempo );
 			ultimoTiempo = tiempo;
 
-			if ( ! pausado && anchoCiclo > 0 ) {
+			if ( ! pausado && anchoCiclo > 1 ) {
 				wrapper.scrollLeft += velocidad * delta / 1000;
 
 				if ( wrapper.scrollLeft >= anchoCiclo ) {
@@ -83,6 +122,7 @@
 		wrapper.addEventListener( 'focusout', function () { pausado = false; } );
 
 		recalcular();
+		window.setTimeout( recalcular, 100 );
 		window.addEventListener( 'load', recalcular, { once: true } );
 
 		var timeout;
@@ -94,18 +134,20 @@
 		if ( ! window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ) {
 			window.requestAnimationFrame( animar );
 		}
+
+		return true;
 	}
 
 	function intentarInicio() {
-		iniciarTicker();
+		if ( iniciarTicker() ) {
+			return;
+		}
 
-		/* NewsExo puede terminar de montar el bloque despues de DOMContentLoaded. */
 		var intentos = 0;
 		var temporizador = window.setInterval( function () {
 			intentos += 1;
-			iniciarTicker();
 
-			if ( document.querySelector( '.news-marquee-wrapper[data-nb-ticker="activo"]' ) || intentos >= 20 ) {
+			if ( iniciarTicker() || intentos >= 40 ) {
 				window.clearInterval( temporizador );
 			}
 		}, 250 );
