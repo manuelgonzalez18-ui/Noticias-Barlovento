@@ -13,7 +13,6 @@ body.nb-core .header-main .site-description p {
 	text-shadow: 0 1px 1px rgba( 0, 0, 0, 0.12 );
 }
 
-/* Mantiene el eslogan legible y cercano al logo. */
 body.nb-core .site-description {
 	margin-top: 0.65rem;
 	margin-bottom: 0;
@@ -22,15 +21,11 @@ body.nb-core .site-description {
 	line-height: 1.45;
 }
 
-/*
- * La franja superior queda reducida a las redes sociales. header.js marca
- * dinamicamente los bloques que contienen redes para no depender de clases
- * internas concretas de NewsExo.
- */
+/* La franja superior queda reducida a los canales oficiales. */
 body.nb-core .nb-topbar-social-only {
 	min-height: 0 !important;
-	padding-top: 0.45rem !important;
-	padding-bottom: 0.45rem !important;
+	padding-top: 0.42rem !important;
+	padding-bottom: 0.42rem !important;
 	background: #080fa0 !important;
 	border: 0 !important;
 }
@@ -59,8 +54,7 @@ body.nb-core .nb-topbar-social-only .nb-topbar-redes {
 	max-width: 100% !important;
 	min-height: 0 !important;
 	margin: 0 !important;
-	padding-top: 0 !important;
-	padding-bottom: 0 !important;
+	padding: 0 !important;
 	background: transparent !important;
 	border: 0 !important;
 	box-shadow: none !important;
@@ -76,13 +70,49 @@ body.nb-core .nb-topbar-social-only [class*="widget"] {
 	box-shadow: none !important;
 }
 
-body.nb-core .nb-topbar-social-only .nb-topbar-social-link {
-	color: #ffffff !important;
+body.nb-core .nb-redes-oficiales {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 0.75rem;
 }
 
-body.nb-core .nb-topbar-social-only .nb-topbar-social-link:hover,
-body.nb-core .nb-topbar-social-only .nb-topbar-social-link:focus {
-	color: #ff5a24 !important;
+body.nb-core .nb-redes-oficiales__etiqueta {
+	color: #ffffff;
+	font-size: 0.85rem;
+	font-weight: 800;
+}
+
+body.nb-core .nb-redes-oficiales__lista {
+	display: flex;
+	align-items: center;
+	gap: 0.42rem;
+}
+
+body.nb-core .nb-redes-oficiales .nb-topbar-social-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.15rem;
+	height: 2.15rem;
+	padding: 0;
+	border: 1px solid rgba( 255, 255, 255, 0.34 );
+	border-radius: 50%;
+	background: rgba( 255, 255, 255, 0.08 );
+	color: #ffffff !important;
+	text-decoration: none;
+}
+
+body.nb-core .nb-redes-oficiales .nb-topbar-social-link:hover,
+body.nb-core .nb-redes-oficiales .nb-topbar-social-link:focus {
+	background: #ffffff;
+	color: #080fa0 !important;
+}
+
+body.nb-core .nb-redes-oficiales__icono {
+	font-size: 0.7rem;
+	font-weight: 900;
+	line-height: 1;
 }
 
 @media ( max-width: 767px ) {
@@ -98,5 +128,13 @@ body.nb-core .nb-topbar-social-only .nb-topbar-social-link:focus {
 	body.nb-core .nb-topbar-social-only .nb-topbar-redes {
 		width: 100% !important;
 		text-align: center !important;
+	}
+
+	body.nb-core .nb-redes-oficiales {
+		justify-content: center;
+	}
+
+	body.nb-core .nb-redes-oficiales__etiqueta {
+		display: none;
 	}
 }
