@@ -56,9 +56,9 @@ $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
 		<?php endif; ?>
 
 		<?php if ( ! empty( $ultimas ) ) : ?>
-			<section class="nb-portada-seccion nb-portada-ultimas" aria-labelledby="nb-portada-ultimas">
+			<section class="nb-portada-seccion nb-portada-ultimas">
 				<?php nb_core_portada_render_cabecera_seccion( 'Lo último' ); ?>
-				<ol id="nb-portada-ultimas" class="nb-portada-ultimas__lista">
+				<ol class="nb-portada-ultimas__lista">
 					<?php foreach ( $ultimas as $ultima ) : ?>
 						<?php $categoria_ultima = nb_core_portada_categoria_post( $ultima->ID ); ?>
 						<li>
@@ -89,6 +89,7 @@ $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
 						<?php endforeach; ?>
 					</div>
 				</section>
+				<?php $usados = array_merge( $usados, wp_list_pluck( $posts, 'ID' ) ); ?>
 			<?php endif; ?>
 		<?php endforeach; ?>
 
@@ -107,6 +108,7 @@ $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
 							<?php endforeach; ?>
 						</div>
 					</section>
+					<?php $usados = array_merge( $usados, wp_list_pluck( $posts, 'ID' ) ); ?>
 				<?php endif; ?>
 			<?php endforeach; ?>
 		</div>
