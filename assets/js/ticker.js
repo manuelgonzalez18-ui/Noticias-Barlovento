@@ -1,6 +1,7 @@
 /*
- * Ticker continuo de Noticias Barlovento.
- * El contenido viene del plugin y no depende de la categoria de NewsExo.
+ * Ticker autónomo de Noticias Barlovento.
+ * Reconstruye la franja completa dentro de .trending-news-area para no
+ * depender del HTML ni de las animaciones internas de NewsExo.
  */
 ( function () {
 	'use strict';
@@ -15,131 +16,95 @@
 		return [];
 	}
 
-	function construirTrack( track, items ) {
-		if ( items.length < 2 ) {
-			return Array.prototype.slice.call( track.children );
-		}
+	function crearGrupo( items, duplicado ) {
+		var grupo = document.createElement( 'div' );
+		grupo.className = 'nb-ticker-grupo';
 
-		track.textContent = '';
+		if ( duplicado ) {
+			grupo.setAttribute( 'aria-hidden', 'true' );
+		}
 
 		items.forEach( function ( item ) {
-			var articulo = document.createElement( 'article' );
-			var contenido = document.createElement( 'div' );
 			var enlace = document.createElement( 'a' );
-			var titulo = document.createElement( 'h6' );
+			var texto = document.createElement( 'span' );
 
-			articulo.className = 'news-headline-post nb-ticker-item';
-			contenido.className = 'news-headline-post-content';
+			enlace.className = 'nb-ticker-enlace';
 			enlace.href = item.url;
-			titulo.className = 'news-headline-post-title';
-			titulo.textContent = item.title;
+			texto.textContent = item.title;
+			enlace.appendChild( texto );
 
-			enlace.appendChild( titulo );
-			contenido.appendChild( enlace );
-			articulo.appendChild( contenido );
-			track.appendChild( articulo );
+			if ( duplicado ) {
+				enlace.setAttribute( 'tabindex', '-1' );
+			}
+
+			grupo.appendChild( enlace );
 		} );
 
-		return Array.prototype.slice.call( track.children );
+		return grupo;
 	}
 
-	function iniciarTicker() {
-		var wrapper = document.querySelector( '.trending-news-area .news-marquee-wrapper' );
-		var track = wrapper ? wrapper.querySelector( '.news-highlights' ) : null;
+	function encontrarArea() {
+		var area = document.querySelector( '.trending-news-area' );
 
-		if ( ! wrapper || ! track || wrapper.dataset.nbTicker === 'activo' ) {
+		if ( area ) {
+			return area;
+		}
+
+		/* Respaldo si el tema cambia el nombre de la clase en una actualización. */
+		var candidatos = Array.prototype.slice.call( document.querySelectorAll( 'section, div' ) );
+
+		return candidatos.find( function ( elemento ) {
+			var texto = ( elemento.textContent || '' ).replace( /\s+/g, ' ' ).trim().toLowerCase();
+			return texto.indexOf( 'puedes haberte perdido' ) === 0 && elemento.getBoundingClientRect().height < 180;
+		} ) || null;
+	}
+
+	function montarTicker() {
+		var area = encontrarArea();
+		var items = obtenerItems();
+
+		if ( ! area || items.length < 2 ) {
 			return false;
 		}
 
-		var originales = construirTrack( track, obtenerItems() );
-
-		if ( originales.length < 2 ) {
-			return false;
+		if ( area.dataset.nbTicker === 'autonomo' ) {
+			return true;
 		}
 
-		wrapper.dataset.nbTicker = 'activo';
-		track.classList.add( 'nb-ticker-activo' );
+		var barra = document.createElement( 'div' );
+		var etiqueta = document.createElement( 'div' );
+		var viewport = document.createElement( 'div' );
+		var track = document.createElement( 'div' );
+		var textoEtiqueta = document.createElement( 'span' );
+		var icono = document.createElement( 'span' );
 
-		var fragmento = document.createDocumentFragment();
+		barra.className = 'nb-ticker-barra';
+		etiqueta.className = 'nb-ticker-etiqueta';
+		viewport.className = 'nb-ticker-viewport';
+		track.className = 'nb-ticker-track';
+		textoEtiqueta.textContent = 'PUEDES HABERTE PERDIDO';
+		icono.className = 'nb-ticker-etiqueta__icono';
+		icono.textContent = '📣';
+		icono.setAttribute( 'aria-hidden', 'true' );
 
-		originales.forEach( function ( item ) {
-			var copia = item.cloneNode( true );
-			copia.setAttribute( 'aria-hidden', 'true' );
+		etiqueta.appendChild( textoEtiqueta );
+		etiqueta.appendChild( icono );
+		track.appendChild( crearGrupo( items, false ) );
+		track.appendChild( crearGrupo( items, true ) );
+		viewport.appendChild( track );
+		barra.appendChild( etiqueta );
+		barra.appendChild( viewport );
 
-			Array.prototype.forEach.call(
-				copia.querySelectorAll( 'a, button, input, select, textarea, [tabindex]' ),
-				function ( elemento ) {
-					elemento.setAttribute( 'tabindex', '-1' );
-				}
-			);
-
-			fragmento.appendChild( copia );
-		} );
-
-		track.appendChild( fragmento );
-
-		var pausado = false;
-		var ultimoTiempo = null;
-		var velocidad = 55;
-		var anchoCiclo = 0;
-
-		function recalcular() {
-			var primero = originales[ 0 ];
-			var ultimo = originales[ originales.length - 1 ];
-
-			if ( primero && ultimo ) {
-				anchoCiclo = Math.max(
-					1,
-					( ultimo.offsetLeft + ultimo.offsetWidth ) - primero.offsetLeft
-				);
-			} else {
-				anchoCiclo = Math.max( 1, track.scrollWidth / 2 );
-			}
-		}
-
-		function animar( tiempo ) {
-			if ( null === ultimoTiempo ) {
-				ultimoTiempo = tiempo;
-			}
-
-			var delta = Math.min( 50, tiempo - ultimoTiempo );
-			ultimoTiempo = tiempo;
-
-			if ( ! pausado && anchoCiclo > 1 ) {
-				wrapper.scrollLeft += velocidad * delta / 1000;
-
-				if ( wrapper.scrollLeft >= anchoCiclo ) {
-					wrapper.scrollLeft -= anchoCiclo;
-				}
-			}
-
-			window.requestAnimationFrame( animar );
-		}
-
-		wrapper.addEventListener( 'mouseenter', function () { pausado = true; } );
-		wrapper.addEventListener( 'mouseleave', function () { pausado = false; } );
-		wrapper.addEventListener( 'focusin', function () { pausado = true; } );
-		wrapper.addEventListener( 'focusout', function () { pausado = false; } );
-
-		recalcular();
-		window.setTimeout( recalcular, 100 );
-		window.addEventListener( 'load', recalcular, { once: true } );
-
-		var timeout;
-		window.addEventListener( 'resize', function () {
-			window.clearTimeout( timeout );
-			timeout = window.setTimeout( recalcular, 150 );
-		} );
-
-		if ( ! window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ) {
-			window.requestAnimationFrame( animar );
-		}
+		area.innerHTML = '';
+		area.classList.add( 'nb-ticker-autonomo' );
+		area.dataset.nbTicker = 'autonomo';
+		area.appendChild( barra );
 
 		return true;
 	}
 
-	function intentarInicio() {
-		if ( iniciarTicker() ) {
+	function iniciar() {
+		if ( montarTicker() ) {
 			return;
 		}
 
@@ -147,15 +112,15 @@
 		var temporizador = window.setInterval( function () {
 			intentos += 1;
 
-			if ( iniciarTicker() || intentos >= 40 ) {
+			if ( montarTicker() || intentos >= 40 ) {
 				window.clearInterval( temporizador );
 			}
 		}, 250 );
 	}
 
-	if ( 'loading' === document.readyState ) {
-		document.addEventListener( 'DOMContentLoaded', intentarInicio );
+	if ( document.readyState === 'loading' ) {
+		document.addEventListener( 'DOMContentLoaded', iniciar );
 	} else {
-		intentarInicio();
+		iniciar();
 	}
 }() );

@@ -2,7 +2,6 @@
  * Ajustes de cabecera de Noticias Barlovento.
  */
 
-/* El eslogan vive sobre el fondo azul del encabezado. */
 body.nb-core .site-description,
 body.nb-core .site-description p,
 body.nb-core .site-branding .site-description,
@@ -21,98 +20,72 @@ body.nb-core .site-description {
 	line-height: 1.45;
 }
 
-/* La franja superior queda reducida a los canales oficiales. */
-body.nb-core .nb-topbar-social-only {
+/*
+ * La franja que antes mostraba reloj/redes queda dedicada a publicidad.
+ * header.js sustituye los widgets heredados por este único bloque.
+ */
+body.nb-core .nb-topbar-publicidad {
 	min-height: 0 !important;
-	padding-top: 0.42rem !important;
-	padding-bottom: 0.42rem !important;
+	padding: 0.65rem 1rem !important;
 	background: #080fa0 !important;
 	border: 0 !important;
 }
 
-body.nb-core .nb-topbar-social-only .nb-topbar-ocultar {
-	display: none !important;
+body.nb-core .nb-topbar-publicidad .nb-publicidad-superior {
+	width: min( 970px, 100% );
+	margin: 0 auto;
 }
 
-body.nb-core .nb-topbar-social-only .container,
-body.nb-core .nb-topbar-social-only .container-fluid,
-body.nb-core .nb-topbar-social-only .row {
-	min-height: 0 !important;
-	margin-top: 0 !important;
-	margin-bottom: 0 !important;
-	padding-top: 0 !important;
-	padding-bottom: 0 !important;
-}
-
-body.nb-core .nb-topbar-social-only .row {
-	align-items: center !important;
-	justify-content: flex-end !important;
-}
-
-body.nb-core .nb-topbar-social-only .nb-topbar-redes {
-	width: auto !important;
-	max-width: 100% !important;
-	min-height: 0 !important;
-	margin: 0 !important;
-	padding: 0 !important;
-	background: transparent !important;
-	border: 0 !important;
-	box-shadow: none !important;
-	flex: 0 1 auto !important;
-}
-
-body.nb-core .nb-topbar-social-only .widget,
-body.nb-core .nb-topbar-social-only [class*="widget"] {
-	margin-bottom: 0 !important;
-	background: transparent !important;
-	border: 0 !important;
-	border-radius: 0 !important;
-	box-shadow: none !important;
-}
-
-body.nb-core .nb-redes-oficiales {
+body.nb-core .nb-publicidad-superior__enlace {
 	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	gap: 0.75rem;
-}
-
-body.nb-core .nb-redes-oficiales__etiqueta {
-	color: #ffffff;
-	font-size: 0.85rem;
-	font-weight: 800;
-}
-
-body.nb-core .nb-redes-oficiales__lista {
-	display: flex;
-	align-items: center;
-	gap: 0.42rem;
-}
-
-body.nb-core .nb-redes-oficiales .nb-topbar-social-link {
-	display: inline-flex;
+	min-height: 88px;
 	align-items: center;
 	justify-content: center;
-	width: 2.15rem;
-	height: 2.15rem;
-	padding: 0;
+	flex-direction: column;
+	gap: 0.18rem;
+	padding: 0.75rem 1rem;
 	border: 1px solid rgba( 255, 255, 255, 0.34 );
-	border-radius: 50%;
-	background: rgba( 255, 255, 255, 0.08 );
-	color: #ffffff !important;
-	text-decoration: none;
-}
-
-body.nb-core .nb-redes-oficiales .nb-topbar-social-link:hover,
-body.nb-core .nb-redes-oficiales .nb-topbar-social-link:focus {
+	border-radius: 0.85rem;
 	background: #ffffff;
-	color: #080fa0 !important;
+	color: #172033;
+	text-align: center;
+	text-decoration: none;
+	box-shadow: 0 0.35rem 1.15rem rgba( 0, 0, 0, 0.08 );
 }
 
-body.nb-core .nb-redes-oficiales__icono {
-	font-size: 0.7rem;
+body.nb-core .nb-publicidad-superior__enlace:hover,
+body.nb-core .nb-publicidad-superior__enlace:focus {
+	border-color: #ff5a24;
+	color: #172033;
+}
+
+body.nb-core .nb-publicidad-superior__titulo {
+	font-size: 0.76rem;
 	font-weight: 900;
-	line-height: 1;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+body.nb-core .nb-publicidad-superior__subtitulo {
+	color: #687386;
+	font-size: 0.78rem;
+	font-weight: 650;
+}
+
+/* Evita que Contacto salte a una segunda fila en escritorios anchos. */
+@media ( min-width: 1200px ) {
+	body.nb-core .navbar-nav,
+	body.nb-core .main-navigation ul.menu {
+		flex-wrap: nowrap !important;
+	}
+
+	body.nb-core .navbar-nav > li > a,
+	body.nb-core .main-navigation ul.menu > li > a {
+		padding-left: 0.82rem !important;
+		padding-right: 0.82rem !important;
+		font-size: 0.94rem !important;
+		white-space: nowrap;
+	}
 }
 
 @media ( max-width: 767px ) {
@@ -121,20 +94,16 @@ body.nb-core .nb-redes-oficiales__icono {
 		font-size: 0.9rem;
 	}
 
-	body.nb-core .nb-topbar-social-only .row {
-		justify-content: center !important;
+	body.nb-core .nb-topbar-publicidad {
+		padding: 0.45rem 0.65rem !important;
 	}
 
-	body.nb-core .nb-topbar-social-only .nb-topbar-redes {
-		width: 100% !important;
-		text-align: center !important;
+	body.nb-core .nb-publicidad-superior__enlace {
+		min-height: 62px;
+		border-radius: 0.65rem;
 	}
 
-	body.nb-core .nb-redes-oficiales {
-		justify-content: center;
-	}
-
-	body.nb-core .nb-redes-oficiales__etiqueta {
-		display: none;
+	body.nb-core .nb-publicidad-superior__subtitulo {
+		font-size: 0.72rem;
 	}
 }
