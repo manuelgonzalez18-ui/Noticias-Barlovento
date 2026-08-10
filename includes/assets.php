@@ -46,6 +46,23 @@ function nb_core_encolar_assets() {
 		nb_core_version_asset( 'assets/css/site.css' )
 	);
 
+	if ( is_home() || is_front_page() ) {
+		wp_enqueue_style(
+			'nb-core-ticker',
+			NB_CORE_URL . 'assets/css/ticker.css',
+			array( 'nb-core-site' ),
+			nb_core_version_asset( 'assets/css/ticker.css' )
+		);
+
+		wp_enqueue_script(
+			'nb-core-ticker',
+			NB_CORE_URL . 'assets/js/ticker.js',
+			array(),
+			nb_core_version_asset( 'assets/js/ticker.js' ),
+			true
+		);
+	}
+
 	if ( function_exists( 'nb_core_portada_esta_activa' ) && nb_core_portada_esta_activa() ) {
 		wp_enqueue_style(
 			'nb-core-portada',
@@ -78,19 +95,5 @@ function nb_core_encolar_assets() {
 			'body.nb-core.single.nb-noticia-activa .nb-noticia article.nb-noticia__articulo{background:transparent;border-radius:0;}'
 		);
 	}
-
-	/*
-	 * El JS propio sigue desactivado por defecto: portada y noticia editorial
-	 * se resuelven con PHP y CSS para no agregar coste de ejecucion al navegador.
-	 */
-	/*
-	wp_enqueue_script(
-		'nb-core-site',
-		NB_CORE_URL . 'assets/js/site.js',
-		array(),
-		nb_core_version_asset( 'assets/js/site.js' ),
-		true
-	);
-	*/
 }
 add_action( 'wp_enqueue_scripts', 'nb_core_encolar_assets', 99 );
