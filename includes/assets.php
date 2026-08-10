@@ -111,7 +111,7 @@ function nb_core_encolar_assets() {
 		'nbHeaderData',
 		array(
 			'higo' => array(
-				'url'  => 'https://higoapp.com/',
+				'url'  => 'https://play.google.com/store/apps/details?id=com.higoapp.ve',
 				'logo' => NB_CORE_URL . 'assets/images/higo-icon.svg',
 			),
 		)
