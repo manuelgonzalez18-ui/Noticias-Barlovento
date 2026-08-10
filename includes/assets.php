@@ -99,6 +99,17 @@ function nb_core_encolar_assets() {
 		true
 	);
 
+	wp_localize_script(
+		'nb-core-header',
+		'nbHeaderData',
+		array(
+			'higo' => array(
+				'url'  => 'https://higoapp.com/',
+				'logo' => NB_CORE_URL . 'assets/images/higo-icon.svg',
+			),
+		)
+	);
+
 	wp_enqueue_script(
 		'nb-core-footer',
 		NB_CORE_URL . 'assets/js/footer.js',
