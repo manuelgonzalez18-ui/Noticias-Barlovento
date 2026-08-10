@@ -103,32 +103,36 @@ seguiría leyendo el mapa de un sitio que ya no existe. No rompe nada visible
 |---|---|
 | `wp/` | Es WordPress |
 | `cgi-bin/` | Lo administra cPanel |
-| `php.ini` | Configuración de PHP del hosting |
+| `php.ini` y `.user.ini` | Configuración de PHP del hosting |
 | `.well-known/` | Con esta carpeta Let's Encrypt renueva el certificado SSL |
-| `.htaccess` | Ver el paso 3 antes de tocarlo |
+| `.htaccess` | Se edita en el paso 3, no se mueve ni se reemplaza |
 | `noticiasbarlovento.com/` | Es la raíz de la cuenta FTP vieja. Se limpia aparte, cuando se elimine esa cuenta |
 | `classicpress/` | Pendiente de identificar. No choca con ningún slug, así que no frena la migración |
 
 ## Paso 3: los archivos de la raíz
 
-### 3.1 Si ya existe un `.htaccess` en la raíz
+### 3.1 El `.htaccess` de la raíz: se edita, no se reemplaza
 
-**Leerlo primero.** Puede tener redirecciones del sitio viejo que convenga
-conservar. Renombrarlo a `.htaccess.viejo` en lugar de borrarlo, y revisar
-después si algo de su contenido hay que reponer.
+Ya existe uno en `public_html`, y contiene **solo** el bloque que genera cPanel
+para fijar la versión de PHP. No tiene redirecciones ni nada del sitio viejo.
 
-### 3.2 Copiar los dos archivos
+Ese bloque es el que le dice a Apache que la raíz del dominio corre con PHP 8.3.
+**No se toca y no se reemplaza**: si se pisa con el `.htaccess` de `/wp/`, el
+`index.php` de la raíz podría quedar servido por otra versión de PHP, o
+descargarse como texto plano en lugar de ejecutarse.
 
-**Copiar** (no mover) de `public_html/wp/` a `public_html/`:
+Entonces: **del `/wp/` se copia únicamente `index.php`**, y al `.htaccess` que ya
+está en la raíz se le agregan nuestras reglas debajo del bloque de cPanel.
 
-- `index.php`
-- `.htaccess`
+### 3.2 Copiar `index.php`
 
-En el Administrador de archivos hay que activar *Settings → Show Hidden Files*
-para ver el `.htaccess`.
+**Copiar** (no mover) `public_html/wp/index.php` a `public_html/`.
 
-Los originales dentro de `/wp/` tienen que quedar donde están. Si movés en lugar
-de copiar, el sitio se cae.
+El original dentro de `/wp/` tiene que quedar donde está. Si movés en lugar de
+copiar, el sitio se cae.
+
+Para ver los archivos que empiezan con punto hay que activar *Settings → Show
+Hidden Files* en el Administrador de archivos.
 
 ### 3.3 Editar el `index.php` de la raíz
 
@@ -149,7 +153,16 @@ dónde está WordPress.
 
 ### 3.4 Dejar el `.htaccess` de la raíz así
 
+El bloque de cPanel va primero y **tal cual está**. Nuestras reglas van debajo.
+
 ```apache
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the "ea-php83" package as the default "PHP" programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php83___lsphp .php .php8 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
+
 # Sin index.php, Apache publicaba el listado completo de la raiz.
 Options -Indexes
 
