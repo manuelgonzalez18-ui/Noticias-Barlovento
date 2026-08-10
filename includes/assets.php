@@ -53,6 +53,15 @@ function nb_core_encolar_assets() {
 			array( 'nb-core-site' ),
 			nb_core_version_asset( 'assets/css/portada.css' )
 		);
+
+		/*
+		 * El CSS general estiliza los <article> del blog generico. La portada
+		 * tiene su propio sistema de tarjetas y debe partir de una caja limpia.
+		 */
+		wp_add_inline_style(
+			'nb-core-portada',
+			'body.nb-portada-activa .nb-portada article{margin:0;padding:0;background:transparent;border:0;}'
+		);
 	}
 
 	/*
