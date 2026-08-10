@@ -62,6 +62,12 @@ Verificá que terminó y que el archivo pesa lo que debería antes de seguir.
 
 ## Paso 2: archivar el sitio estático viejo
 
+> **Antes de mover nada, saber esto.** El sitio viejo se hizo con Sitejet
+> Builder, y sigue vinculado al dominio en cPanel → Sitejet Builder. La única
+> acción que ofrece esa pantalla es "Continue Editing": no se puede desvincular
+> ni borrar. **No entrar a ese editor**: publicar desde ahí recrea todas estas
+> carpetas y sobrescribe el `index.php` y el `.htaccess` de la raíz.
+
 Apache sirve carpetas y archivos reales **antes** de pasarle el pedido a
 WordPress. Si existe la carpeta `contacto/` y además una página de WordPress con
 el slug `contacto`, gana la carpeta vieja y la página queda inalcanzable.

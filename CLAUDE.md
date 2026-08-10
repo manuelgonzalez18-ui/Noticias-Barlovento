@@ -61,11 +61,20 @@ public_html/wp/wp-content/plugins/noticiasbarlovento-core/
 
 - NewsExo 8.6 está marcado como vulnerable en WP Toolkit. Pendiente evaluar si
   hay versión parcheada o si toca migrar de tema.
-- El sitio vive en el subdirectorio `/wp/`. Se decidió moverlo a la raíz del
-  dominio: el procedimiento está escrito en [docs/migracion-a-raiz.md](docs/migracion-a-raiz.md)
-  y se ejecuta a mano en cPanel, no por el despliegue. Incluye archivar el sitio
-  estático viejo de la raíz (carpetas `blog`, `contacto`, `equipo`, `cobertura`,
-  `css`), que hoy bloquearía las páginas de WordPress con esos mismos slugs.
+- **Sitejet Builder sigue vinculado a `noticiasbarlovento.com`.** El sitio
+  estático viejo se hizo con esa herramienta y en cPanel → Sitejet Builder
+  aparece con la única acción "Continue Editing": no hay forma de desvincularlo
+  ni borrarlo desde ahí. **No entrar a ese editor.** Sitejet no republica solo,
+  pero si alguien publica desde ahí sobrescribe `public_html` con el sitio
+  estático y se lleva puestos el `index.php` y el `.htaccess` de la raíz, o sea
+  deshace la migración.
+
+- El sitio se está moviendo de `/wp/` a la raíz del dominio. El procedimiento
+  está en [docs/migracion-a-raiz.md](docs/migracion-a-raiz.md) y se ejecuta a
+  mano en cPanel, no por el despliegue. Hecho hasta ahora: el `.htaccess` y el
+  `index.php` de la raíz ya están puestos, y `noticiasbarlovento.com` sirve
+  WordPress. Falta archivar el sitio estático viejo y cambiar las dos URLs en
+  Ajustes → Generales.
 - Título y descripción del sitio siguen en los valores por defecto de WordPress
   ("untitled site" / "My WordPress Blog").
 - Alerta de Let's Encrypt en cPanel: revisar estado del certificado SSL.
