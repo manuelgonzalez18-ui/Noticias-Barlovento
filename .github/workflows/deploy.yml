@@ -64,7 +64,7 @@ jobs:
             **/.gitignore
 
           state-name: .ftp-deploy-sync-state.json
-          # Primera corrida: dejar en true, revisar en Actions que las rutas
-          # sean las correctas, y recien ahi volver a false.
-          dry-run: true
+          # Corrida en seco ya verificada: la ruta y la lista de archivos son
+          # las correctas. Desde aca, cada push a main despliega de verdad.
+          dry-run: false
           dangerous-clean-slate: false
