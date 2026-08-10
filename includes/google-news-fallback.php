@@ -30,6 +30,10 @@ function nb_core_google_news_fallback_servir() {
 		return;
 	}
 
+	if ( function_exists( 'nb_core_google_news_render_sitemap_robusto' ) ) {
+		nb_core_google_news_render_sitemap_robusto();
+	}
+
 	if ( function_exists( 'nb_core_google_news_render_sitemap' ) ) {
 		nb_core_google_news_render_sitemap();
 	}
