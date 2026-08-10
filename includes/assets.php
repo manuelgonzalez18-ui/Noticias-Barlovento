@@ -12,9 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Devuelve una version de cache basada en la fecha real del archivo.
  *
- * Esto evita tener que subir manualmente NB_CORE_VERSION cada vez que cambia
- * CSS o JS, y mantiene un fallback estable si el archivo no es legible.
- *
  * @param string $ruta_relativa Ruta relativa dentro del plugin.
  * @return string
  */
@@ -34,9 +31,6 @@ function nb_core_version_asset( $ruta_relativa ) {
 
 /**
  * Devuelve las publicaciones que alimentan el ticker del sitio.
- *
- * El ticker no depende de la categoria configurada en NewsExo: toma siempre
- * las entradas publicadas mas recientes del sitio.
  *
  * @return array<int,array{title:string,url:string}>
  */
@@ -74,9 +68,6 @@ function nb_core_datos_ticker() {
 
 /**
  * Encola los assets del sitio.
- *
- * La prioridad 99 asegura que el CSS propio se cargue despues del tema
- * News Gallery y pueda sobrescribir sus estilos sin recurrir a !important.
  */
 function nb_core_encolar_assets() {
 	wp_enqueue_style(
@@ -93,6 +84,13 @@ function nb_core_encolar_assets() {
 		nb_core_version_asset( 'assets/css/header.css' )
 	);
 
+	wp_enqueue_style(
+		'nb-core-contacto',
+		NB_CORE_URL . 'assets/css/contacto.css',
+		array( 'nb-core-site' ),
+		nb_core_version_asset( 'assets/css/contacto.css' )
+	);
+
 	wp_enqueue_script(
 		'nb-core-header',
 		NB_CORE_URL . 'assets/js/header.js',
@@ -101,10 +99,17 @@ function nb_core_encolar_assets() {
 		true
 	);
 
-	/*
-	 * NewsExo muestra la franja de titulares tambien en categorias y archivos.
-	 * Por eso el ticker debe cargarse globalmente y no solo en la portada.
-	 */
+	if ( function_exists( 'nb_core_contacto_redes' ) ) {
+		wp_localize_script(
+			'nb-core-header',
+			'nbHeaderData',
+			array(
+				'socials' => nb_core_contacto_redes(),
+			)
+		);
+	}
+
+	/* NewsExo muestra la franja de titulares en portada y archivos. */
 	wp_enqueue_style(
 		'nb-core-ticker',
 		NB_CORE_URL . 'assets/css/ticker.css',
@@ -136,10 +141,6 @@ function nb_core_encolar_assets() {
 			nb_core_version_asset( 'assets/css/portada.css' )
 		);
 
-		/*
-		 * El CSS general estiliza los <article> del blog generico. La portada
-		 * tiene su propio sistema de tarjetas y debe partir de una caja limpia.
-		 */
 		wp_add_inline_style(
 			'nb-core-portada',
 			'body.nb-portada-activa .nb-portada article{margin:0;padding:0;background:transparent;border:0;}'
@@ -154,7 +155,6 @@ function nb_core_encolar_assets() {
 			nb_core_version_asset( 'assets/css/noticia.css' )
 		);
 
-		/* La noticia propia no debe heredar la caja generica del single del tema. */
 		wp_add_inline_style(
 			'nb-core-noticia',
 			'body.nb-core.single.nb-noticia-activa .nb-noticia article.nb-noticia__articulo{background:transparent;border-radius:0;}'
