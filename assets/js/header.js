@@ -1,6 +1,6 @@
 /*
  * Convierte la franja superior heredada de NewsExo en un espacio publicitario.
- * Las redes oficiales permanecen exclusivamente en la sección de contacto.
+ * La campaña activa promociona Higo.
  */
 ( function () {
 	'use strict';
@@ -10,6 +10,17 @@
 		'linkedin.com', 'youtube.com', 'youtu.be', 'tiktok.com', 't.me',
 		'telegram.me', 'threads.net', 'bsky.app', 'wa.me', 'whatsapp.com'
 	];
+
+	function datosHigo() {
+		if ( window.nbHeaderData && window.nbHeaderData.higo ) {
+			return window.nbHeaderData.higo;
+		}
+
+		return {
+			url: 'https://higoapp.com/',
+			logo: ''
+		};
+	}
 
 	function esEnlaceSocial( enlace ) {
 		var href = ( enlace.getAttribute( 'href' ) || '' ).toLowerCase();
@@ -69,24 +80,54 @@
 		return mejor;
 	}
 
-	function crearPublicidad() {
+	function crearPublicidadHigo() {
+		var higo = datosHigo();
 		var contenedor = document.createElement( 'div' );
 		var enlace = document.createElement( 'a' );
-		var titulo = document.createElement( 'span' );
-		var subtitulo = document.createElement( 'small' );
+		var etiqueta = document.createElement( 'span' );
+		var marca = document.createElement( 'div' );
+		var texto = document.createElement( 'div' );
+		var titulo = document.createElement( 'strong' );
+		var mensaje = document.createElement( 'span' );
+		var detalle = document.createElement( 'small' );
+		var boton = document.createElement( 'span' );
 
-		contenedor.className = 'nb-publicidad-superior';
-		enlace.className = 'nb-publicidad-superior__enlace';
-		enlace.href = '/#contacto';
-		enlace.setAttribute( 'aria-label', 'Espacio publicitario. Contactar a Noticias Barlovento' );
+		contenedor.className = 'nb-publicidad-superior nb-publicidad-higo';
+		enlace.className = 'nb-publicidad-higo__enlace';
+		enlace.href = higo.url || 'https://higoapp.com/';
+		enlace.target = '_blank';
+		enlace.rel = 'noopener noreferrer sponsored';
+		enlace.setAttribute( 'aria-label', 'Publicidad de Higo. Muévete y envía con Higo' );
 
-		titulo.className = 'nb-publicidad-superior__titulo';
-		titulo.textContent = 'ESPACIO PUBLICITARIO';
-		subtitulo.className = 'nb-publicidad-superior__subtitulo';
-		subtitulo.textContent = 'Anúnciate en Noticias Barlovento';
+		etiqueta.className = 'nb-publicidad-higo__etiqueta';
+		etiqueta.textContent = 'PUBLICIDAD';
 
-		enlace.appendChild( titulo );
-		enlace.appendChild( subtitulo );
+		marca.className = 'nb-publicidad-higo__marca';
+		if ( higo.logo ) {
+			var logo = document.createElement( 'img' );
+			logo.className = 'nb-publicidad-higo__logo';
+			logo.src = higo.logo;
+			logo.alt = '';
+			logo.width = 64;
+			logo.height = 64;
+			marca.appendChild( logo );
+		}
+
+		texto.className = 'nb-publicidad-higo__texto';
+		titulo.textContent = 'Higo';
+		mensaje.textContent = 'Muévete y envía con Higo';
+		detalle.textContent = 'Movilidad y envíos en Venezuela';
+		texto.appendChild( titulo );
+		texto.appendChild( mensaje );
+		texto.appendChild( detalle );
+		marca.appendChild( texto );
+
+		boton.className = 'nb-publicidad-higo__boton';
+		boton.textContent = 'Conoce Higo →';
+
+		enlace.appendChild( etiqueta );
+		enlace.appendChild( marca );
+		enlace.appendChild( boton );
 		contenedor.appendChild( enlace );
 
 		return contenedor;
@@ -105,15 +146,15 @@
 			return false;
 		}
 
-		if ( franja.dataset.nbPublicidad === 'activa' ) {
+		if ( franja.dataset.nbPublicidad === 'higo' ) {
 			return true;
 		}
 
-		franja.dataset.nbPublicidad = 'activa';
+		franja.dataset.nbPublicidad = 'higo';
 		franja.classList.remove( 'nb-topbar-social-only' );
-		franja.classList.add( 'nb-topbar-publicidad' );
+		franja.classList.add( 'nb-topbar-publicidad', 'nb-topbar-publicidad--higo' );
 		franja.innerHTML = '';
-		franja.appendChild( crearPublicidad() );
+		franja.appendChild( crearPublicidadHigo() );
 
 		return true;
 	}
