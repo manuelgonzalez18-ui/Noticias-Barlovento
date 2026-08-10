@@ -38,6 +38,7 @@ function nb_core_cargar_modulos() {
 	$modulos = array(
 		'contacto',
 		'transparencia',
+		'migraciones',
 		'google-news',
 		'assets',
 		'customizations',
