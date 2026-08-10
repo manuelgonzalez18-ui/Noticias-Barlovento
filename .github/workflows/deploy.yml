@@ -66,7 +66,7 @@ jobs:
             **/.gitignore
 
           state-name: .ftp-deploy-sync-state.json
-          # En seco hasta confirmar la ruta con la cuenta FTP nueva.
-          # Cuando el log muestre que sube a la carpeta correcta, volver a false.
-          dry-run: true
+          # Ruta verificada en seco con la cuenta FTP restringida.
+          # Desde aca, cada push a main despliega de verdad.
+          dry-run: false
           dangerous-clean-slate: false
