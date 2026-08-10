@@ -20,56 +20,135 @@ body.nb-core .site-description {
 	line-height: 1.45;
 }
 
-/*
- * La franja que antes mostraba reloj/redes queda dedicada a publicidad.
- * header.js sustituye los widgets heredados por este único bloque.
- */
+/* Franja superior dedicada a publicidad. */
 body.nb-core .nb-topbar-publicidad {
 	min-height: 0 !important;
-	padding: 0.65rem 1rem !important;
+	padding: 0.7rem 1rem !important;
 	background: #080fa0 !important;
 	border: 0 !important;
 }
 
 body.nb-core .nb-topbar-publicidad .nb-publicidad-superior {
-	width: min( 970px, 100% );
+	width: min( 1080px, 100% );
 	margin: 0 auto;
 }
 
-body.nb-core .nb-publicidad-superior__enlace {
+/* Campaña Higo. */
+body.nb-core .nb-publicidad-higo__enlace {
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr ) auto;
+	align-items: center;
+	gap: 1rem;
+	min-height: 104px;
+	padding: 0.9rem 1.15rem 0.9rem 1rem;
+	overflow: hidden;
+	border: 1px solid rgba( 255, 255, 255, 0.18 );
+	border-radius: 1rem;
+	background:
+		radial-gradient( circle at 86% 15%, rgba( 48, 87, 242, 0.48 ), transparent 34% ),
+		linear-gradient( 112deg, #0a1330 0%, #0d1944 58%, #122567 100% );
+	color: #ffffff !important;
+	text-decoration: none !important;
+	box-shadow: 0 0.5rem 1.5rem rgba( 0, 0, 0, 0.18 );
+	transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+body.nb-core .nb-publicidad-higo__enlace::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background: linear-gradient( 90deg, transparent 0 60%, rgba( 255, 255, 255, 0.035 ) 60% 61%, transparent 61% );
+}
+
+body.nb-core .nb-publicidad-higo__enlace:hover,
+body.nb-core .nb-publicidad-higo__enlace:focus {
+	transform: translateY( -1px );
+	border-color: rgba( 111, 139, 255, 0.75 );
+	box-shadow: 0 0.7rem 1.8rem rgba( 0, 0, 0, 0.24 );
+	color: #ffffff !important;
+}
+
+body.nb-core .nb-publicidad-higo__etiqueta {
+	position: absolute;
+	top: 0.48rem;
+	right: 0.65rem;
+	z-index: 2;
+	padding: 0.16rem 0.42rem;
+	border: 1px solid rgba( 255, 255, 255, 0.24 );
+	border-radius: 999px;
+	color: rgba( 255, 255, 255, 0.7 );
+	font-size: 0.58rem;
+	font-weight: 800;
+	letter-spacing: 0.12em;
+	line-height: 1.2;
+}
+
+body.nb-core .nb-publicidad-higo__marca {
 	display: flex;
-	min-height: 88px;
+	align-items: center;
+	gap: 0.9rem;
+	min-width: 0;
+}
+
+body.nb-core .nb-publicidad-higo__logo {
+	flex: 0 0 66px;
+	width: 66px;
+	height: 66px;
+	object-fit: cover;
+	border-radius: 0.9rem;
+	box-shadow: 0 0.35rem 1rem rgba( 0, 0, 0, 0.3 );
+}
+
+body.nb-core .nb-publicidad-higo__texto {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	line-height: 1.12;
+}
+
+body.nb-core .nb-publicidad-higo__texto strong {
+	margin-bottom: 0.18rem;
+	color: #ffffff;
+	font-size: 1.55rem;
+	font-weight: 900;
+	letter-spacing: -0.03em;
+}
+
+body.nb-core .nb-publicidad-higo__texto > span {
+	color: #ffffff;
+	font-size: clamp( 1rem, 2vw, 1.28rem );
+	font-weight: 800;
+}
+
+body.nb-core .nb-publicidad-higo__texto small {
+	margin-top: 0.27rem;
+	color: rgba( 255, 255, 255, 0.72 );
+	font-size: 0.78rem;
+	font-weight: 600;
+}
+
+body.nb-core .nb-publicidad-higo__boton {
+	position: relative;
+	z-index: 1;
+	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	flex-direction: column;
-	gap: 0.18rem;
-	padding: 0.75rem 1rem;
-	border: 1px solid rgba( 255, 255, 255, 0.34 );
-	border-radius: 0.85rem;
-	background: #ffffff;
-	color: #172033;
-	text-align: center;
-	text-decoration: none;
-	box-shadow: 0 0.35rem 1.15rem rgba( 0, 0, 0, 0.08 );
+	min-height: 42px;
+	padding: 0.65rem 1rem;
+	border-radius: 999px;
+	background: #3057f2;
+	color: #ffffff;
+	font-size: 0.82rem;
+	font-weight: 850;
+	white-space: nowrap;
+	box-shadow: 0 0.35rem 0.9rem rgba( 48, 87, 242, 0.28 );
 }
 
-body.nb-core .nb-publicidad-superior__enlace:hover,
-body.nb-core .nb-publicidad-superior__enlace:focus {
-	border-color: #ff5a24;
-	color: #172033;
-}
-
-body.nb-core .nb-publicidad-superior__titulo {
-	font-size: 0.76rem;
-	font-weight: 900;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-}
-
-body.nb-core .nb-publicidad-superior__subtitulo {
-	color: #687386;
-	font-size: 0.78rem;
-	font-weight: 650;
+body.nb-core .nb-publicidad-higo__enlace:hover .nb-publicidad-higo__boton,
+body.nb-core .nb-publicidad-higo__enlace:focus .nb-publicidad-higo__boton {
+	background: #4268ff;
 }
 
 /* Evita que Contacto salte a una segunda fila en escritorios anchos. */
@@ -95,15 +174,50 @@ body.nb-core .nb-publicidad-superior__subtitulo {
 	}
 
 	body.nb-core .nb-topbar-publicidad {
-		padding: 0.45rem 0.65rem !important;
+		padding: 0.45rem 0.55rem !important;
 	}
 
-	body.nb-core .nb-publicidad-superior__enlace {
-		min-height: 62px;
-		border-radius: 0.65rem;
+	body.nb-core .nb-publicidad-higo__enlace {
+		grid-template-columns: 1fr;
+		gap: 0.65rem;
+		min-height: 116px;
+		padding: 0.75rem 0.8rem;
+		border-radius: 0.75rem;
 	}
 
-	body.nb-core .nb-publicidad-superior__subtitulo {
-		font-size: 0.72rem;
+	body.nb-core .nb-publicidad-higo__marca {
+		gap: 0.7rem;
+		padding-right: 3.4rem;
+	}
+
+	body.nb-core .nb-publicidad-higo__logo {
+		flex-basis: 54px;
+		width: 54px;
+		height: 54px;
+		border-radius: 0.7rem;
+	}
+
+	body.nb-core .nb-publicidad-higo__texto strong {
+		font-size: 1.2rem;
+	}
+
+	body.nb-core .nb-publicidad-higo__texto > span {
+		font-size: 0.92rem;
+	}
+
+	body.nb-core .nb-publicidad-higo__texto small {
+		font-size: 0.68rem;
+	}
+
+	body.nb-core .nb-publicidad-higo__boton {
+		justify-self: stretch;
+		min-height: 38px;
+		font-size: 0.76rem;
+	}
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	body.nb-core .nb-publicidad-higo__enlace {
+		transition: none;
 	}
 }
