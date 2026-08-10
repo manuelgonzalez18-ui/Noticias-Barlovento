@@ -24,16 +24,19 @@ En cPanel → Cuentas FTP, crear un usuario cuyo directorio raíz sea exactament
 public_html/wp/wp-content/plugins/noticiasbarlovento-core
 ```
 
-Restringirlo a esa carpeta limita el daño si las credenciales se filtran.
-Si se usa un usuario restringido, en `.github/workflows/deploy.yml` hay que
-cambiar `server-dir` por `./`.
+Restringirlo a esa carpeta limita el daño si las credenciales se filtran: esas
+credenciales viven en un secret de GitHub, y desde ahí no pueden tocar
+`wp-config.php` ni el resto del hosting.
 
-> **Ojo con la cuenta que ya existe.** La cuenta `admin@noticiasbarlovento.com`
-> que figura en cPanel tiene como raíz `/home/…/admin`, que no es la carpeta del
-> plugin. O se crea un usuario nuevo apuntado al plugin (y entonces
-> `server-dir: ./`), o se usa una cuenta con acceso a `public_html` y se deja el
-> `server-dir` completo que trae el workflow. Las dos opciones funcionan; lo que
-> no funciona es mezclarlas.
+Como el usuario aterriza directamente en la carpeta del plugin, el workflow usa
+`server-dir: ./`.
+
+> **No sirve la cuenta `admin@noticiasbarlovento.com` que ya existía.** Su raíz
+> es `/home/…/admin`, que no es la carpeta del plugin. Con esa cuenta el primer
+> despliegue creó el árbol `public_html/wp/wp-content/plugins/…` *dentro* de esa
+> jaula: los archivos subieron bien, pero a un lugar donde WordPress no mira, y
+> el plugin no aparecía en el panel. Si quedó esa carpeta colgada dentro de
+> `admin/`, se puede borrar sin problema.
 
 Datos del servidor, según cPanel:
 
@@ -54,14 +57,15 @@ Settings → Secrets and variables → Actions → New repository secret:
 
 Las credenciales van solo ahí: nunca dentro de un archivo del repo.
 
-### 4. El despliegue ya está activo
+### 4. Corrida en seco
 
-La corrida en seco se hizo y la ruta quedó verificada, así que `dry-run` está
-en `false`: **cada push a `main` sube al servidor**.
+Con `dry-run: true`, la Action se conecta y deja en el log qué archivos subiría
+y a dónde, sin escribir nada. Es la forma de verificar la ruta antes de tocar
+producción, y conviene repetirla cada vez que se cambie `server-dir` o la
+cuenta FTP.
 
-Si en algún momento hace falta volver a probar sin escribir —por ejemplo al
-cambiar `server-dir`— poner `dry-run: true` en `.github/workflows/deploy.yml`,
-hacer push, leer el log en la pestaña Actions y después volver a `false`.
+Cuando el log muestre la ruta correcta, volver a `dry-run: false`: a partir de
+ahí cada push a `main` despliega de verdad.
 
 ### 5. Activar el plugin
 

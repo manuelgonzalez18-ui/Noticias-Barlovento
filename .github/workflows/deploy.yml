@@ -44,9 +44,11 @@ jobs:
 
           local-dir: ./
 
-          # Si el usuario FTP esta restringido a la carpeta del plugin,
-          # cambia esta linea por:  server-dir: ./
-          server-dir: public_html/wp/wp-content/plugins/noticiasbarlovento-core/
+          # El usuario FTP esta restringido a la carpeta del plugin: al entrar
+          # ya aterriza ahi, asi que la ruta es la raiz de su jaula.
+          # Si algun dia se usara una cuenta con acceso a todo el hosting,
+          # habria que volver a: public_html/wp/wp-content/plugins/noticiasbarlovento-core/
+          server-dir: ./
 
           # Las exclusiones van como bloque de texto, un patron por linea.
           # Si se escriben como lista YAML, Actions rechaza el archivo entero
@@ -64,7 +66,7 @@ jobs:
             **/.gitignore
 
           state-name: .ftp-deploy-sync-state.json
-          # Corrida en seco ya verificada: la ruta y la lista de archivos son
-          # las correctas. Desde aca, cada push a main despliega de verdad.
-          dry-run: false
+          # En seco hasta confirmar la ruta con la cuenta FTP nueva.
+          # Cuando el log muestre que sube a la carpeta correcta, volver a false.
+          dry-run: true
           dangerous-clean-slate: false
