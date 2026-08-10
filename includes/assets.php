@@ -33,7 +33,7 @@ function nb_core_version_asset( $ruta_relativa ) {
 }
 
 /**
- * Devuelve las publicaciones que alimentan el ticker de portada.
+ * Devuelve las publicaciones que alimentan el ticker del sitio.
  *
  * El ticker no depende de la categoria configurada en NewsExo: toma siempre
  * las entradas publicadas mas recientes del sitio.
@@ -93,30 +93,40 @@ function nb_core_encolar_assets() {
 		nb_core_version_asset( 'assets/css/header.css' )
 	);
 
-	if ( is_home() || is_front_page() ) {
-		wp_enqueue_style(
-			'nb-core-ticker',
-			NB_CORE_URL . 'assets/css/ticker.css',
-			array( 'nb-core-site' ),
-			nb_core_version_asset( 'assets/css/ticker.css' )
-		);
+	wp_enqueue_script(
+		'nb-core-header',
+		NB_CORE_URL . 'assets/js/header.js',
+		array(),
+		nb_core_version_asset( 'assets/js/header.js' ),
+		true
+	);
 
-		wp_enqueue_script(
-			'nb-core-ticker',
-			NB_CORE_URL . 'assets/js/ticker.js',
-			array(),
-			nb_core_version_asset( 'assets/js/ticker.js' ),
-			true
-		);
+	/*
+	 * NewsExo muestra la franja de titulares tambien en categorias y archivos.
+	 * Por eso el ticker debe cargarse globalmente y no solo en la portada.
+	 */
+	wp_enqueue_style(
+		'nb-core-ticker',
+		NB_CORE_URL . 'assets/css/ticker.css',
+		array( 'nb-core-site' ),
+		nb_core_version_asset( 'assets/css/ticker.css' )
+	);
 
-		wp_localize_script(
-			'nb-core-ticker',
-			'nbTickerData',
-			array(
-				'items' => nb_core_datos_ticker(),
-			)
-		);
-	}
+	wp_enqueue_script(
+		'nb-core-ticker',
+		NB_CORE_URL . 'assets/js/ticker.js',
+		array(),
+		nb_core_version_asset( 'assets/js/ticker.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'nb-core-ticker',
+		'nbTickerData',
+		array(
+			'items' => nb_core_datos_ticker(),
+		)
+	);
 
 	if ( function_exists( 'nb_core_portada_esta_activa' ) && nb_core_portada_esta_activa() ) {
 		wp_enqueue_style(
