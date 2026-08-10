@@ -57,10 +57,11 @@ add_filter( 'body_class', 'nb_core_noticia_clase_body' );
  */
 function nb_core_noticia_tipos() {
 	return array(
-		'redaccion'    => 'Redaccion propia',
-		'nota-prensa'  => 'Nota de prensa',
-		'agencia'      => 'Agencia',
-		'colaborador'  => 'Colaborador',
+		'redaccion'   => 'Redaccion propia',
+		'nota-prensa' => 'Nota de prensa',
+		'agencia'     => 'Agencia',
+		'colaborador' => 'Colaborador',
+		'patrocinado' => 'Contenido patrocinado',
 	);
 }
 
@@ -85,11 +86,14 @@ add_action( 'add_meta_boxes', 'nb_core_noticia_registrar_metabox' );
  * @param WP_Post $post Entrada actual.
  */
 function nb_core_noticia_render_metabox( $post ) {
-	$tipo          = get_post_meta( $post->ID, '_nb_tipo_contenido', true );
-	$fuente        = get_post_meta( $post->ID, '_nb_fuente', true );
-	$localidad     = get_post_meta( $post->ID, '_nb_localidad', true );
-	$credito_foto  = get_post_meta( $post->ID, '_nb_credito_foto', true );
-	$tipos         = nb_core_noticia_tipos();
+	$tipo             = get_post_meta( $post->ID, '_nb_tipo_contenido', true );
+	$fuente           = get_post_meta( $post->ID, '_nb_fuente', true );
+	$localidad        = get_post_meta( $post->ID, '_nb_localidad', true );
+	$credito_foto     = get_post_meta( $post->ID, '_nb_credito_foto', true );
+	$url_original     = get_post_meta( $post->ID, '_nb_url_fuente_original', true );
+	$nota_correccion  = get_post_meta( $post->ID, '_nb_nota_correccion', true );
+	$republicado      = '1' === (string) get_post_meta( $post->ID, '_nb_republicado_google_news', true );
+	$tipos            = nb_core_noticia_tipos();
 
 	if ( ! isset( $tipos[ $tipo ] ) ) {
 		$tipo = 'redaccion';
@@ -110,6 +114,10 @@ function nb_core_noticia_render_metabox( $post ) {
 		<input id="nb_fuente" name="nb_fuente" type="text" value="<?php echo esc_attr( $fuente ); ?>" style="width:100%;" placeholder="Ej. Alcaldia de Brion">
 	</p>
 	<p>
+		<label for="nb_url_fuente_original"><strong>URL de la fuente original</strong></label><br>
+		<input id="nb_url_fuente_original" name="nb_url_fuente_original" type="url" value="<?php echo esc_attr( $url_original ); ?>" style="width:100%;" placeholder="https://...">
+	</p>
+	<p>
 		<label for="nb_localidad"><strong>Localidad</strong></label><br>
 		<input id="nb_localidad" name="nb_localidad" type="text" value="<?php echo esc_attr( $localidad ); ?>" style="width:100%;" placeholder="Ej. Higuerote, Brion">
 	</p>
@@ -117,7 +125,18 @@ function nb_core_noticia_render_metabox( $post ) {
 		<label for="nb_credito_foto"><strong>Credito de foto</strong></label><br>
 		<input id="nb_credito_foto" name="nb_credito_foto" type="text" value="<?php echo esc_attr( $credito_foto ); ?>" style="width:100%;" placeholder="Ej. Noticias Barlovento">
 	</p>
-	<p style="margin-bottom:0;color:#646970;">Los campos son opcionales. Si se dejan vacios, la noticia mantiene valores seguros por defecto.</p>
+	<p>
+		<label>
+			<input type="checkbox" name="nb_republicado_google_news" value="1" <?php checked( $republicado ); ?>>
+			<strong>Republicado íntegramente de otra fuente</strong>
+		</label>
+		<br><span style="color:#646970;">Lo mantiene en Google Search, pero lo excluye de Google News y del sitemap de noticias.</span>
+	</p>
+	<p>
+		<label for="nb_nota_correccion"><strong>Nota de correccion o actualizacion</strong></label><br>
+		<textarea id="nb_nota_correccion" name="nb_nota_correccion" rows="4" style="width:100%;" placeholder="Ej. Corrección: se actualizó el nombre de la institución..."><?php echo esc_textarea( $nota_correccion ); ?></textarea>
+	</p>
+	<p style="margin-bottom:0;color:#646970;">Los campos son opcionales. Para Google News conviene identificar autor, fuente, localidad y cualquier republicación o patrocinio.</p>
 	<?php
 }
 
@@ -167,6 +186,26 @@ function nb_core_noticia_guardar_metadatos( $post_id ) {
 			update_post_meta( $post_id, $meta_key, $valor );
 		}
 	}
+
+	$url_original = isset( $_POST['nb_url_fuente_original'] ) ? esc_url_raw( wp_unslash( $_POST['nb_url_fuente_original'] ) ) : '';
+	if ( '' === $url_original ) {
+		delete_post_meta( $post_id, '_nb_url_fuente_original' );
+	} else {
+		update_post_meta( $post_id, '_nb_url_fuente_original', $url_original );
+	}
+
+	$nota_correccion = isset( $_POST['nb_nota_correccion'] ) ? sanitize_textarea_field( wp_unslash( $_POST['nb_nota_correccion'] ) ) : '';
+	if ( '' === $nota_correccion ) {
+		delete_post_meta( $post_id, '_nb_nota_correccion' );
+	} else {
+		update_post_meta( $post_id, '_nb_nota_correccion', $nota_correccion );
+	}
+
+	if ( isset( $_POST['nb_republicado_google_news'] ) && '1' === sanitize_text_field( wp_unslash( $_POST['nb_republicado_google_news'] ) ) ) {
+		update_post_meta( $post_id, '_nb_republicado_google_news', '1' );
+	} else {
+		delete_post_meta( $post_id, '_nb_republicado_google_news' );
+	}
 }
 add_action( 'save_post_post', 'nb_core_noticia_guardar_metadatos' );
 
@@ -178,13 +217,19 @@ add_action( 'save_post_post', 'nb_core_noticia_guardar_metadatos' );
  * @return string
  */
 function nb_core_noticia_meta( $post_id, $clave ) {
-	$permitidas = array( 'tipo_contenido', 'fuente', 'localidad', 'credito_foto' );
+	$permitidas = array( 'tipo_contenido', 'fuente', 'localidad', 'credito_foto', 'url_fuente_original', 'nota_correccion' );
 
 	if ( ! in_array( $clave, $permitidas, true ) ) {
 		return '';
 	}
 
-	return sanitize_text_field( (string) get_post_meta( $post_id, '_nb_' . $clave, true ) );
+	$valor = (string) get_post_meta( $post_id, '_nb_' . $clave, true );
+
+	if ( 'url_fuente_original' === $clave ) {
+		return esc_url_raw( $valor );
+	}
+
+	return sanitize_text_field( $valor );
 }
 
 /**
@@ -257,7 +302,7 @@ function nb_core_noticia_relacionadas( $post_id, $cantidad = 3 ) {
 /**
  * Busca una pagina de contacto existente para ofrecer correcciones.
  *
- * @return string URL o cadena vacia.
+ * @return string URL de contacto.
  */
 function nb_core_noticia_url_contacto() {
 	foreach ( array( 'contacto', 'contactenos', 'contact' ) as $slug ) {
@@ -268,5 +313,5 @@ function nb_core_noticia_url_contacto() {
 		}
 	}
 
-	return '';
+	return home_url( '/#contacto' );
 }

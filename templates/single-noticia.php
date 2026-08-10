@@ -21,8 +21,11 @@ get_header();
 		$categorias       = get_the_category( $post_id );
 		$categoria        = ! empty( $categorias ) ? $categorias[0] : null;
 		$tipo             = nb_core_noticia_etiqueta_tipo( $post_id );
+		$tipo_clave       = nb_core_noticia_meta( $post_id, 'tipo_contenido' );
 		$localidad        = nb_core_noticia_meta( $post_id, 'localidad' );
 		$credito_foto     = nb_core_noticia_meta( $post_id, 'credito_foto' );
+		$url_original     = nb_core_noticia_meta( $post_id, 'url_fuente_original' );
+		$nota_correccion  = nb_core_noticia_meta( $post_id, 'nota_correccion' );
 		$fuente_visible   = nb_core_noticia_fuente_visible( $post_id );
 		$relacionadas     = nb_core_noticia_relacionadas( $post_id, 3 );
 		$url_contacto     = nb_core_noticia_url_contacto();
@@ -52,6 +55,10 @@ get_header();
 					<?php endif; ?>
 				</div>
 
+				<?php if ( 'patrocinado' === $tipo_clave ) : ?>
+					<p class="nb-noticia__aviso-patrocinado"><strong>Contenido patrocinado.</strong> Esta publicación tiene una relación comercial y se identifica separadamente del contenido editorial independiente.</p>
+				<?php endif; ?>
+
 				<h1 class="nb-noticia__titulo"><?php the_title(); ?></h1>
 
 				<?php if ( has_excerpt( $post_id ) ) : ?>
@@ -60,7 +67,7 @@ get_header();
 
 				<div class="nb-noticia__firma">
 					<span>
-						Por <a href="<?php echo esc_url( get_author_posts_url( (int) get_the_author_meta( 'ID' ) ) ); ?>"><?php echo esc_html( get_the_author() ); ?></a>
+						Por <a rel="author" href="<?php echo esc_url( get_author_posts_url( (int) get_the_author_meta( 'ID' ) ) ); ?>"><?php echo esc_html( get_the_author() ); ?></a>
 					</span>
 					<span aria-hidden="true">·</span>
 					<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>">
@@ -112,10 +119,20 @@ get_header();
 				?>
 			</div>
 
+			<?php if ( '' !== $nota_correccion ) : ?>
+				<aside class="nb-noticia__nota-correccion" aria-label="Corrección o actualización">
+					<strong>Corrección / actualización</strong>
+					<p><?php echo esc_html( $nota_correccion ); ?></p>
+				</aside>
+			<?php endif; ?>
+
 			<footer class="nb-noticia__pie-editorial">
 				<div class="nb-noticia__fuente">
 					<strong>Fuente</strong>
 					<span><?php echo esc_html( $fuente_visible ); ?></span>
+					<?php if ( '' !== $url_original ) : ?>
+						<a href="<?php echo esc_url( $url_original ); ?>" target="_blank" rel="noopener noreferrer">Ver fuente original</a>
+					<?php endif; ?>
 				</div>
 
 				<?php if ( ! empty( $categorias ) ) : ?>
@@ -134,9 +151,7 @@ get_header();
 					<a href="<?php echo esc_url( 'https://www.facebook.com/sharer/sharer.php?u=' . rawurlencode( $url_actual ) ); ?>" target="_blank" rel="noopener noreferrer">Facebook</a>
 					<a href="<?php echo esc_url( 'https://t.me/share/url?url=' . rawurlencode( $url_actual ) . '&text=' . rawurlencode( $titulo_compartir ) ); ?>" target="_blank" rel="noopener noreferrer">Telegram</a>
 				</div>
-				<?php if ( '' !== $url_contacto ) : ?>
-					<a class="nb-noticia__correccion" href="<?php echo esc_url( $url_contacto ); ?>">Solicitar una correccion</a>
-				<?php endif; ?>
+				<a class="nb-noticia__correccion" href="<?php echo esc_url( $url_contacto ); ?>">Solicitar una correccion</a>
 			</section>
 
 			<?php if ( ! empty( $relacionadas ) ) : ?>

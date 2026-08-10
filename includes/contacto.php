@@ -113,7 +113,8 @@ add_filter( 'wp_nav_menu_items', 'nb_core_contacto_agregar_menu', 20, 2 );
  * Renderiza la sección de contacto al final del sitio.
  */
 function nb_core_contacto_renderizar() {
-	$datos = nb_core_contacto_datos();
+	$datos       = nb_core_contacto_datos();
+	$transparencia = function_exists( 'nb_core_transparencia_enlaces' ) ? nb_core_transparencia_enlaces() : array();
 	?>
 	<section id="contacto" class="nb-contacto" aria-labelledby="nb-contacto-titulo">
 		<div class="nb-contacto__interior">
@@ -151,6 +152,15 @@ function nb_core_contacto_renderizar() {
 					</div>
 				</div>
 			</div>
+
+			<?php if ( $transparencia ) : ?>
+				<nav class="nb-contacto__transparencia" aria-label="Transparencia editorial">
+					<strong>Transparencia editorial</strong>
+					<?php foreach ( $transparencia as $enlace ) : ?>
+						<a href="<?php echo esc_url( $enlace['url'] ); ?>"><?php echo esc_html( $enlace['label'] ); ?></a>
+					<?php endforeach; ?>
+				</nav>
+			<?php endif; ?>
 		</div>
 	</section>
 	<?php
