@@ -99,6 +99,14 @@ function nb_core_encolar_assets() {
 		true
 	);
 
+	wp_enqueue_script(
+		'nb-core-footer',
+		NB_CORE_URL . 'assets/js/footer.js',
+		array(),
+		nb_core_version_asset( 'assets/js/footer.js' ),
+		true
+	);
+
 	if ( function_exists( 'nb_core_contacto_redes' ) ) {
 		wp_localize_script(
 			'nb-core-header',
