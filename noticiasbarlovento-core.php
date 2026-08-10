@@ -3,7 +3,7 @@
  * Plugin Name:       Noticias Barlovento Core
  * Plugin URI:        https://noticiasbarlovento.com/
  * Description:       Personalizaciones propias de Noticias Barlovento. Todo el codigo del sitio vive aqui, nunca en los temas.
- * Version:           1.4.4
+ * Version:           1.5.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Noticias Barlovento
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Se usa como version de respaldo para recursos cuyo mtime no se pueda leer.
  */
-define( 'NB_CORE_VERSION', '1.4.4' );
+define( 'NB_CORE_VERSION', '1.5.0' );
 
 /** Ruta absoluta al archivo principal del plugin. */
 define( 'NB_CORE_FILE', __FILE__ );
@@ -33,12 +33,10 @@ define( 'NB_CORE_URL', plugin_dir_url( NB_CORE_FILE ) );
 
 /**
  * Carga los modulos del plugin.
- *
- * Para agregar uno nuevo: crear el archivo en includes/ y sumar su nombre
- * (sin extension) al array.
  */
 function nb_core_cargar_modulos() {
 	$modulos = array(
+		'contacto',
 		'assets',
 		'customizations',
 		'estructura-inicial',
