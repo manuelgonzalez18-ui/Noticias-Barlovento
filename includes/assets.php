@@ -33,6 +33,46 @@ function nb_core_version_asset( $ruta_relativa ) {
 }
 
 /**
+ * Devuelve las publicaciones que alimentan el ticker de portada.
+ *
+ * El ticker no depende de la categoria configurada en NewsExo: toma siempre
+ * las entradas publicadas mas recientes del sitio.
+ *
+ * @return array<int,array{title:string,url:string}>
+ */
+function nb_core_datos_ticker() {
+	$entradas = get_posts(
+		array(
+			'post_type'           => 'post',
+			'post_status'         => 'publish',
+			'posts_per_page'      => 8,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'ignore_sticky_posts' => false,
+			'no_found_rows'       => true,
+		)
+	);
+
+	$items = array();
+
+	foreach ( $entradas as $entrada ) {
+		$titulo = get_the_title( $entrada );
+		$url    = get_permalink( $entrada );
+
+		if ( ! $titulo || ! $url ) {
+			continue;
+		}
+
+		$items[] = array(
+			'title' => wp_strip_all_tags( $titulo ),
+			'url'   => esc_url_raw( $url ),
+		);
+	}
+
+	return $items;
+}
+
+/**
  * Encola los assets del sitio.
  *
  * La prioridad 99 asegura que el CSS propio se cargue despues del tema
@@ -67,6 +107,14 @@ function nb_core_encolar_assets() {
 			array(),
 			nb_core_version_asset( 'assets/js/ticker.js' ),
 			true
+		);
+
+		wp_localize_script(
+			'nb-core-ticker',
+			'nbTickerData',
+			array(
+				'items' => nb_core_datos_ticker(),
+			)
 		);
 	}
 
