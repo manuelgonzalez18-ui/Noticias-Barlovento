@@ -54,18 +54,14 @@ Settings → Secrets and variables → Actions → New repository secret:
 
 Las credenciales van solo ahí: nunca dentro de un archivo del repo.
 
-### 4. Primera corrida en seco
+### 4. El despliegue ya está activo
 
-**El workflow viene con `dry-run: true`**, a propósito: así la primera corrida
-no toca el servidor.
+La corrida en seco se hizo y la ruta quedó verificada, así que `dry-run` está
+en `false`: **cada push a `main` sube al servidor**.
 
-Una vez cargados los secrets, disparalo a mano desde la pestaña Actions
-(*Desplegar plugin a produccion* → *Run workflow*) y leé el log: muestra qué
-archivos subiría y a qué ruta, sin escribir nada.
-
-Cuando la ruta se vea correcta, cambiar `dry-run` a `false` en
-`.github/workflows/deploy.yml`. A partir de ahí, cada merge a `main` despliega
-de verdad.
+Si en algún momento hace falta volver a probar sin escribir —por ejemplo al
+cambiar `server-dir`— poner `dry-run: true` en `.github/workflows/deploy.yml`,
+hacer push, leer el log en la pestaña Actions y después volver a `false`.
 
 ### 5. Activar el plugin
 
