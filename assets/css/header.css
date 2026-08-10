@@ -9,7 +9,7 @@ body.nb-core .site-branding .site-description,
 body.nb-core .header-main .site-description,
 body.nb-core .header-main .site-description p {
 	color: #ffffff !important;
-	opacity: 0.92;
+	opacity: 0.96;
 	text-shadow: 0 1px 1px rgba( 0, 0, 0, 0.12 );
 }
 
@@ -22,9 +22,81 @@ body.nb-core .site-description {
 	line-height: 1.45;
 }
 
+/*
+ * La franja superior queda reducida a las redes sociales. header.js marca
+ * dinamicamente los bloques que contienen redes para no depender de clases
+ * internas concretas de NewsExo.
+ */
+body.nb-core .nb-topbar-social-only {
+	min-height: 0 !important;
+	padding-top: 0.45rem !important;
+	padding-bottom: 0.45rem !important;
+	background: #080fa0 !important;
+	border: 0 !important;
+}
+
+body.nb-core .nb-topbar-social-only .nb-topbar-ocultar {
+	display: none !important;
+}
+
+body.nb-core .nb-topbar-social-only .container,
+body.nb-core .nb-topbar-social-only .container-fluid,
+body.nb-core .nb-topbar-social-only .row {
+	min-height: 0 !important;
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+
+body.nb-core .nb-topbar-social-only .row {
+	align-items: center !important;
+	justify-content: flex-end !important;
+}
+
+body.nb-core .nb-topbar-social-only .nb-topbar-redes {
+	width: auto !important;
+	max-width: 100% !important;
+	min-height: 0 !important;
+	margin: 0 !important;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+	background: transparent !important;
+	border: 0 !important;
+	box-shadow: none !important;
+	flex: 0 1 auto !important;
+}
+
+body.nb-core .nb-topbar-social-only .widget,
+body.nb-core .nb-topbar-social-only [class*="widget"] {
+	margin-bottom: 0 !important;
+	background: transparent !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+body.nb-core .nb-topbar-social-only .nb-topbar-social-link {
+	color: #ffffff !important;
+}
+
+body.nb-core .nb-topbar-social-only .nb-topbar-social-link:hover,
+body.nb-core .nb-topbar-social-only .nb-topbar-social-link:focus {
+	color: #ff5a24 !important;
+}
+
 @media ( max-width: 767px ) {
 	body.nb-core .site-description {
 		margin-top: 0.45rem;
 		font-size: 0.9rem;
+	}
+
+	body.nb-core .nb-topbar-social-only .row {
+		justify-content: center !important;
+	}
+
+	body.nb-core .nb-topbar-social-only .nb-topbar-redes {
+		width: 100% !important;
+		text-align: center !important;
 	}
 }
