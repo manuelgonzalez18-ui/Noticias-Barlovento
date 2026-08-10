@@ -107,17 +107,7 @@ function nb_core_encolar_assets() {
 		true
 	);
 
-	if ( function_exists( 'nb_core_contacto_redes' ) ) {
-		wp_localize_script(
-			'nb-core-header',
-			'nbHeaderData',
-			array(
-				'socials' => nb_core_contacto_redes(),
-			)
-		);
-	}
-
-	/* NewsExo muestra la franja de titulares en portada y archivos. */
+	/* Ticker autonomo alimentado por las noticias mas recientes. */
 	wp_enqueue_style(
 		'nb-core-ticker',
 		NB_CORE_URL . 'assets/css/ticker.css',
