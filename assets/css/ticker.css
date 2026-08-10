@@ -1,7 +1,7 @@
 /*
  * Ticker continuo de Ultimas Noticias.
- * El movimiento lo controla ticker.js mediante scrollLeft para evitar
- * conflictos con las animaciones nativas de NewsExo.
+ * El movimiento lo controla ticker.js mediante scrollLeft y los titulares
+ * vienen directamente de las publicaciones recientes del sitio.
  */
 
 body.nb-core .trending-news-area .news-marquee-wrapper {
@@ -13,6 +13,7 @@ body.nb-core .trending-news-area .news-marquee-wrapper {
 body.nb-core .trending-news-area .news-highlights.nb-ticker-activo {
 	display: inline-flex !important;
 	align-items: center;
+	gap: 0;
 	width: max-content !important;
 	min-width: max-content !important;
 	max-width: none !important;
@@ -22,18 +23,55 @@ body.nb-core .trending-news-area .news-highlights.nb-ticker-activo {
 }
 
 body.nb-core .trending-news-area .news-highlights.nb-ticker-activo .news-headline-post {
+	position: relative;
+	display: inline-flex !important;
 	flex: 0 0 auto;
+	align-items: center;
+	margin: 0;
+	padding: 0 2.6rem 0 0;
 	white-space: nowrap;
+}
+
+body.nb-core .trending-news-area .news-highlights.nb-ticker-activo .nb-ticker-item::after {
+	content: '•';
+	position: absolute;
+	right: 1.1rem;
+	color: #ff5a24;
+	font-size: 1rem;
+	font-weight: 900;
 }
 
 body.nb-core .trending-news-area .news-highlights.nb-ticker-activo .news-headline-post-content,
 body.nb-core .trending-news-area .news-highlights.nb-ticker-activo .news-headline-post-title {
-	white-space: nowrap;
+	width: auto !important;
+	margin: 0 !important;
+	white-space: nowrap !important;
+}
+
+body.nb-core .trending-news-area .news-highlights.nb-ticker-activo a {
+	display: inline-block;
+	color: #172033;
+	text-decoration: none;
+}
+
+body.nb-core .trending-news-area .news-highlights.nb-ticker-activo a:hover,
+body.nb-core .trending-news-area .news-highlights.nb-ticker-activo a:focus {
+	color: #ff5a24;
+}
+
+body.nb-core .trending-news-area .news-highlights.nb-ticker-activo .news-headline-post-title {
+	font-size: 0.95rem;
+	font-weight: 750;
+	line-height: 1.35;
 }
 
 @media ( max-width: 767px ) {
-	body.nb-core .trending-news-area .news-headline-post {
-		padding-right: 1.5rem;
+	body.nb-core .trending-news-area .news-highlights.nb-ticker-activo .news-headline-post {
+		padding-right: 2rem;
+	}
+
+	body.nb-core .trending-news-area .news-highlights.nb-ticker-activo .nb-ticker-item::after {
+		right: 0.75rem;
 	}
 }
 
