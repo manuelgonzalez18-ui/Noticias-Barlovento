@@ -1,19 +1,512 @@
 /*
- * Estilos propios de Noticias Barlovento.
+ * Sistema visual de Noticias Barlovento.
  *
- * Se cargan con prioridad 99, despues del tema News Gallery, asi que alcanza
- * con la especificidad normal para sobrescribir. Evitar !important.
- *
- * Al modificar este archivo hay que subir NB_CORE_VERSION en
- * noticiasbarlovento-core.php o el navegador sirve la copia cacheada.
+ * Este archivo se carga despues del tema News Gallery. Las reglas se limitan
+ * a body.nb-core para no contaminar wp-admin ni otros contextos.
  */
 
-/* Variables propias, para no repetir valores por todo el archivo. */
 :root {
 	--nb-core-espacio: 1rem;
+	--nb-color-tinta: #172033;
+	--nb-color-tinta-suave: #536174;
+	--nb-color-fondo: #f5f7fa;
+	--nb-color-superficie: #ffffff;
+	--nb-color-linea: #dde3ea;
+	--nb-color-marca: #a9151b;
+	--nb-color-marca-oscura: #7c0f14;
+	--nb-color-barlovento: #0d6674;
+	--nb-color-barlovento-oscura: #084a55;
+	--nb-radio: 0.75rem;
+	--nb-sombra: 0 0.5rem 1.75rem rgba( 23, 32, 51, 0.08 );
+	--nb-ancho: 1180px;
 }
 
-/* Marcador: confirma que el CSS del plugin esta cargando en produccion. */
 body.nb-core {
 	--nb-core-cargado: 1;
+	background: var( --nb-color-fondo );
+	color: var( --nb-color-tinta );
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	font-size: 1rem;
+	line-height: 1.65;
+	text-rendering: optimizeLegibility;
+}
+
+body.nb-core *,
+body.nb-core *::before,
+body.nb-core *::after {
+	box-sizing: border-box;
+}
+
+body.nb-core img {
+	max-width: 100%;
+	height: auto;
+}
+
+body.nb-core a {
+	color: var( --nb-color-barlovento );
+	text-decoration-thickness: 0.08em;
+	text-underline-offset: 0.16em;
+}
+
+body.nb-core a:hover,
+body.nb-core a:focus {
+	color: var( --nb-color-marca );
+}
+
+body.nb-core a:focus-visible,
+body.nb-core button:focus-visible,
+body.nb-core input:focus-visible,
+body.nb-core select:focus-visible,
+body.nb-core textarea:focus-visible {
+	outline: 3px solid rgba( 13, 102, 116, 0.32 );
+	outline-offset: 3px;
+}
+
+/* Contenedor general. */
+body.nb-core .container,
+body.nb-core .site-content,
+body.nb-core .site-main,
+body.nb-core .content-area {
+	max-width: var( --nb-ancho );
+}
+
+/* Cabecera e identidad. */
+body.nb-core .site-header,
+body.nb-core header.header,
+body.nb-core .header-main {
+	background: var( --nb-color-superficie );
+	border-bottom: 1px solid var( --nb-color-linea );
+}
+
+body.nb-core .site-branding,
+body.nb-core .site-branding-text {
+	padding-block: 0.75rem;
+}
+
+body.nb-core .site-title,
+body.nb-core .site-title a {
+	color: var( --nb-color-tinta );
+	font-weight: 800;
+	letter-spacing: -0.03em;
+	line-height: 1.05;
+	text-decoration: none;
+}
+
+body.nb-core .site-description {
+	max-width: 44rem;
+	color: var( --nb-color-tinta-suave );
+	font-size: 0.95rem;
+}
+
+/* Navegacion principal: barra compacta y claramente editorial. */
+body.nb-core .navbar,
+body.nb-core .main-navigation,
+body.nb-core nav.navigation-primary {
+	background: var( --nb-color-tinta );
+	border: 0;
+	box-shadow: none;
+}
+
+body.nb-core .navbar-nav > li > a,
+body.nb-core .main-navigation .menu > li > a,
+body.nb-core .main-navigation .nav-menu > li > a {
+	color: #ffffff;
+	font-size: 0.82rem;
+	font-weight: 750;
+	letter-spacing: 0.035em;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+
+body.nb-core .navbar-nav > li > a:hover,
+body.nb-core .navbar-nav > li.current-menu-item > a,
+body.nb-core .navbar-nav > li.current-menu-ancestor > a,
+body.nb-core .main-navigation .menu > li > a:hover,
+body.nb-core .main-navigation .menu > li.current-menu-item > a,
+body.nb-core .main-navigation .nav-menu > li > a:hover,
+body.nb-core .main-navigation .nav-menu > li.current-menu-item > a {
+	background: var( --nb-color-marca );
+	color: #ffffff;
+}
+
+/* Area principal. */
+body.nb-core .site-content,
+body.nb-core main.site-main {
+	padding-block: clamp( 1rem, 2.4vw, 2rem );
+}
+
+/* Titulos de pagina y de seccion. */
+body.nb-core .page-header,
+body.nb-core .archive-header {
+	margin-bottom: 1.5rem;
+	border-bottom: 3px solid var( --nb-color-tinta );
+}
+
+body.nb-core .page-title,
+body.nb-core .archive-title,
+body.nb-core .widget-title {
+	color: var( --nb-color-tinta );
+	font-weight: 800;
+	letter-spacing: -0.025em;
+}
+
+body.nb-core .page-title,
+body.nb-core .archive-title {
+	margin: 0;
+	padding-bottom: 0.65rem;
+	font-size: clamp( 1.55rem, 3vw, 2.2rem );
+}
+
+/* Tarjetas de noticias en portada, categorias y archivos. */
+body.nb-core.home article,
+body.nb-core.blog article,
+body.nb-core.archive article,
+body.nb-core.search article {
+	margin-bottom: 1.25rem;
+	padding: 0 0 1.25rem;
+	background: transparent;
+	border: 0;
+	border-bottom: 1px solid var( --nb-color-linea );
+}
+
+body.nb-core.home article .post-thumbnail img,
+body.nb-core.blog article .post-thumbnail img,
+body.nb-core.archive article .post-thumbnail img,
+body.nb-core.search article .post-thumbnail img,
+body.nb-core.home article .wp-post-image,
+body.nb-core.blog article .wp-post-image,
+body.nb-core.archive article .wp-post-image,
+body.nb-core.search article .wp-post-image {
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	object-fit: cover;
+	border-radius: var( --nb-radio );
+}
+
+body.nb-core .entry-title,
+body.nb-core .post-title,
+body.nb-core article h2,
+body.nb-core article h3 {
+	color: var( --nb-color-tinta );
+	font-weight: 800;
+	letter-spacing: -0.025em;
+	line-height: 1.12;
+}
+
+body.nb-core .entry-title a,
+body.nb-core .post-title a,
+body.nb-core article h2 a,
+body.nb-core article h3 a {
+	color: inherit;
+	text-decoration: none;
+}
+
+body.nb-core .entry-title a:hover,
+body.nb-core .entry-title a:focus,
+body.nb-core .post-title a:hover,
+body.nb-core .post-title a:focus,
+body.nb-core article h2 a:hover,
+body.nb-core article h2 a:focus,
+body.nb-core article h3 a:hover,
+body.nb-core article h3 a:focus {
+	color: var( --nb-color-marca );
+}
+
+/* La primera noticia de portada recibe jerarquia de apertura. */
+body.nb-core.home .site-main article:first-of-type,
+body.nb-core.blog .site-main article:first-of-type {
+	padding-bottom: clamp( 1.4rem, 3vw, 2.2rem );
+	border-bottom-width: 3px;
+	border-bottom-color: var( --nb-color-tinta );
+}
+
+body.nb-core.home .site-main article:first-of-type .entry-title,
+body.nb-core.home .site-main article:first-of-type .post-title,
+body.nb-core.blog .site-main article:first-of-type .entry-title,
+body.nb-core.blog .site-main article:first-of-type .post-title {
+	font-size: clamp( 2rem, 5vw, 3.35rem );
+}
+
+/* Metadatos y categorias. */
+body.nb-core .entry-meta,
+body.nb-core .post-meta,
+body.nb-core .posted-on,
+body.nb-core .byline {
+	color: var( --nb-color-tinta-suave );
+	font-size: 0.82rem;
+	font-weight: 600;
+	line-height: 1.45;
+}
+
+body.nb-core .cat-links a,
+body.nb-core .post-categories a,
+body.nb-core .category a,
+body.nb-core a[rel="category tag"] {
+	display: inline-block;
+	margin: 0 0.35rem 0.35rem 0;
+	padding: 0.25rem 0.5rem;
+	background: rgba( 13, 102, 116, 0.1 );
+	border-radius: 999px;
+	color: var( --nb-color-barlovento-oscura );
+	font-size: 0.7rem;
+	font-weight: 800;
+	letter-spacing: 0.04em;
+	line-height: 1.2;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+body.nb-core .entry-summary,
+body.nb-core .post-excerpt {
+	color: var( --nb-color-tinta-suave );
+}
+
+body.nb-core .more-link,
+body.nb-core .read-more,
+body.nb-core a.more-link {
+	display: inline-flex;
+	align-items: center;
+	margin-top: 0.35rem;
+	padding: 0.5rem 0.75rem;
+	background: var( --nb-color-tinta );
+	border-radius: 0.35rem;
+	color: #ffffff;
+	font-size: 0.78rem;
+	font-weight: 750;
+	text-decoration: none;
+}
+
+body.nb-core .more-link:hover,
+body.nb-core .more-link:focus,
+body.nb-core .read-more:hover,
+body.nb-core .read-more:focus {
+	background: var( --nb-color-marca );
+	color: #ffffff;
+}
+
+/* Barra lateral. */
+body.nb-core .widget {
+	margin-bottom: 1.25rem;
+	padding: 1rem;
+	background: var( --nb-color-superficie );
+	border: 1px solid var( --nb-color-linea );
+	border-radius: var( --nb-radio );
+	box-shadow: var( --nb-sombra );
+}
+
+body.nb-core .widget-title {
+	margin: -1rem -1rem 1rem;
+	padding: 0.8rem 1rem;
+	border-bottom: 1px solid var( --nb-color-linea );
+	font-size: 1rem;
+	text-transform: uppercase;
+}
+
+body.nb-core .widget ul {
+	margin: 0;
+	padding-left: 0;
+	list-style: none;
+}
+
+body.nb-core .widget li + li {
+	margin-top: 0.65rem;
+	padding-top: 0.65rem;
+	border-top: 1px solid var( --nb-color-linea );
+}
+
+body.nb-core .widget a {
+	font-weight: 650;
+	text-decoration: none;
+}
+
+/* Noticia individual: ancho de lectura y jerarquia editorial. */
+body.nb-core.single .site-main article {
+	background: var( --nb-color-superficie );
+	border-radius: var( --nb-radio );
+}
+
+body.nb-core.single .entry-header,
+body.nb-core.single .entry-content,
+body.nb-core.single .entry-footer,
+body.nb-core.single .post-content {
+	max-width: 780px;
+	margin-inline: auto;
+}
+
+body.nb-core.single .entry-header {
+	padding-top: clamp( 1rem, 3vw, 2rem );
+}
+
+body.nb-core.single .entry-title,
+body.nb-core.single .post-title {
+	margin-bottom: 0.65rem;
+	font-size: clamp( 2rem, 5vw, 3.35rem );
+	line-height: 1.05;
+}
+
+body.nb-core.single .entry-content,
+body.nb-core.single .post-content {
+	font-size: clamp( 1rem, 1.4vw, 1.12rem );
+	line-height: 1.8;
+}
+
+body.nb-core.single .entry-content p,
+body.nb-core.single .post-content p {
+	margin-bottom: 1.25em;
+}
+
+body.nb-core.single .entry-content h2,
+body.nb-core.single .entry-content h3,
+body.nb-core.single .post-content h2,
+body.nb-core.single .post-content h3 {
+	margin-top: 1.7em;
+	margin-bottom: 0.65em;
+	line-height: 1.2;
+}
+
+body.nb-core.single blockquote {
+	margin: 1.5rem 0;
+	padding: 0.75rem 1rem 0.75rem 1.25rem;
+	border-left: 4px solid var( --nb-color-barlovento );
+	background: rgba( 13, 102, 116, 0.06 );
+	color: var( --nb-color-tinta );
+	font-size: 1.08em;
+}
+
+body.nb-core.single figure,
+body.nb-core.single .wp-block-image {
+	margin-block: 1.5rem;
+}
+
+body.nb-core.single figcaption {
+	margin-top: 0.45rem;
+	color: var( --nb-color-tinta-suave );
+	font-size: 0.78rem;
+	line-height: 1.4;
+}
+
+/* Formularios y busqueda. */
+body.nb-core input[type="text"],
+body.nb-core input[type="search"],
+body.nb-core input[type="email"],
+body.nb-core input[type="url"],
+body.nb-core textarea,
+body.nb-core select {
+	min-height: 2.75rem;
+	border: 1px solid #bdc7d4;
+	border-radius: 0.4rem;
+	background: #ffffff;
+	color: var( --nb-color-tinta );
+}
+
+body.nb-core button,
+body.nb-core input[type="submit"],
+body.nb-core .button {
+	border: 0;
+	border-radius: 0.4rem;
+	background: var( --nb-color-marca );
+	color: #ffffff;
+	font-weight: 750;
+}
+
+body.nb-core button:hover,
+body.nb-core input[type="submit"]:hover,
+body.nb-core .button:hover {
+	background: var( --nb-color-marca-oscura );
+}
+
+/* Paginacion. */
+body.nb-core .navigation.pagination,
+body.nb-core .posts-navigation,
+body.nb-core .post-navigation {
+	margin-block: 1.5rem;
+	padding-top: 1rem;
+	border-top: 1px solid var( --nb-color-linea );
+}
+
+body.nb-core .page-numbers {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 2.3rem;
+	min-height: 2.3rem;
+	padding: 0.3rem 0.6rem;
+	border-radius: 0.35rem;
+	text-decoration: none;
+}
+
+body.nb-core .page-numbers.current {
+	background: var( --nb-color-tinta );
+	color: #ffffff;
+}
+
+/* Pie. */
+body.nb-core .site-footer,
+body.nb-core footer.footer {
+	background: var( --nb-color-tinta );
+	color: #d7dee7;
+}
+
+body.nb-core .site-footer a,
+body.nb-core footer.footer a {
+	color: #ffffff;
+}
+
+body.nb-core .site-footer .widget,
+body.nb-core footer.footer .widget {
+	background: transparent;
+	border-color: rgba( 255, 255, 255, 0.14 );
+	box-shadow: none;
+}
+
+/* Movil: lectura primero, navegacion compacta y objetivos tactiles grandes. */
+@media ( max-width: 767px ) {
+	body.nb-core {
+		font-size: 0.98rem;
+	}
+
+	body.nb-core .site-content,
+	body.nb-core main.site-main {
+		padding-block: 0.9rem;
+	}
+
+	body.nb-core .navbar-nav > li > a,
+	body.nb-core .main-navigation .menu > li > a,
+	body.nb-core .main-navigation .nav-menu > li > a {
+		min-height: 44px;
+		padding: 0.75rem 1rem;
+	}
+
+	body.nb-core .site-title,
+	body.nb-core .site-title a {
+		font-size: clamp( 1.6rem, 8vw, 2.2rem );
+	}
+
+	body.nb-core.home .site-main article:first-of-type .entry-title,
+	body.nb-core.home .site-main article:first-of-type .post-title,
+	body.nb-core.blog .site-main article:first-of-type .entry-title,
+	body.nb-core.blog .site-main article:first-of-type .post-title,
+	body.nb-core.single .entry-title,
+	body.nb-core.single .post-title {
+		font-size: clamp( 1.8rem, 8.5vw, 2.45rem );
+	}
+
+	body.nb-core.single .site-main article {
+		border-radius: 0;
+	}
+
+	body.nb-core .widget {
+		box-shadow: none;
+	}
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	body.nb-core *,
+	body.nb-core *::before,
+	body.nb-core *::after {
+		scroll-behavior: auto;
+		transition-duration: 0.01ms;
+		animation-duration: 0.01ms;
+		animation-iteration-count: 1;
+	}
 }
