@@ -91,6 +91,13 @@ function nb_core_encolar_assets() {
 		nb_core_version_asset( 'assets/css/contacto.css' )
 	);
 
+	wp_enqueue_style(
+		'nb-core-google-news',
+		NB_CORE_URL . 'assets/css/google-news.css',
+		array( 'nb-core-site', 'nb-core-contacto' ),
+		nb_core_version_asset( 'assets/css/google-news.css' )
+	);
+
 	wp_enqueue_script(
 		'nb-core-header',
 		NB_CORE_URL . 'assets/js/header.js',
@@ -160,7 +167,7 @@ function nb_core_encolar_assets() {
 		wp_enqueue_style(
 			'nb-core-noticia',
 			NB_CORE_URL . 'assets/css/noticia.css',
-			array( 'nb-core-site' ),
+			array( 'nb-core-site', 'nb-core-google-news' ),
 			nb_core_version_asset( 'assets/css/noticia.css' )
 		);
 
