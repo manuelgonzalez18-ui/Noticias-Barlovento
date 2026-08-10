@@ -1,0 +1,117 @@
+/* Google News, transparencia editorial y estados especiales. */
+
+.nb-noticia__aviso-patrocinado {
+	margin: 0 0 1rem;
+	padding: 0.75rem 0.9rem;
+	border-left: 4px solid #ff5a24;
+	background: #fff4ee;
+	color: #54230f;
+	font-size: 0.84rem;
+	line-height: 1.5;
+}
+
+.nb-noticia__nota-correccion {
+	width: min( 100%, 780px );
+	margin: 1rem auto 0;
+	padding: 1rem 1.1rem;
+	border: 1px solid #e4b34f;
+	border-radius: 0.65rem;
+	background: #fff9e9;
+	color: #4a3811;
+}
+
+.nb-noticia__nota-correccion strong {
+	display: block;
+	margin-bottom: 0.3rem;
+	font-size: 0.76rem;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.nb-noticia__nota-correccion p {
+	margin: 0;
+	line-height: 1.55;
+}
+
+.nb-noticia__fuente a {
+	margin-top: 0.25rem;
+	font-weight: 750;
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+}
+
+.nb-contacto__transparencia {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1rem;
+	align-items: center;
+	margin-top: 1.25rem;
+	padding-top: 1rem;
+	border-top: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+.nb-contacto__transparencia strong {
+	margin-right: 0.25rem;
+	font-size: 0.78rem;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.nb-contacto__transparencia a {
+	color: #ffffff;
+	font-size: 0.82rem;
+	font-weight: 700;
+	text-decoration: underline;
+	text-underline-offset: 0.18em;
+}
+
+.nb-equipo {
+	display: grid;
+	grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	gap: 1rem;
+	margin-top: 1.5rem;
+}
+
+.nb-equipo__autor {
+	margin: 0;
+	padding: 1.25rem;
+	border: 1px solid #e2e6ec;
+	border-radius: 0.8rem;
+	background: #ffffff;
+}
+
+.nb-equipo__autor h2 {
+	margin: 0 0 0.4rem;
+	font-size: 1.25rem;
+}
+
+.nb-equipo__autor h2 a {
+	text-decoration: none;
+}
+
+.nb-equipo__cargo {
+	margin: 0 0 0.65rem;
+	color: #ff5a24;
+	font-size: 0.78rem;
+	font-weight: 850;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+}
+
+.nb-equipo__publicaciones {
+	margin-bottom: 0;
+	color: #687386;
+	font-size: 0.78rem;
+	font-weight: 700;
+}
+
+@media ( max-width: 700px ) {
+	.nb-equipo {
+		grid-template-columns: 1fr;
+	}
+
+	.nb-contacto__transparencia {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+}
