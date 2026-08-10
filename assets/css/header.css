@@ -1,0 +1,30 @@
+/*
+ * Ajustes de cabecera de Noticias Barlovento.
+ */
+
+/* El eslogan vive sobre el fondo azul del encabezado. */
+body.nb-core .site-description,
+body.nb-core .site-description p,
+body.nb-core .site-branding .site-description,
+body.nb-core .header-main .site-description,
+body.nb-core .header-main .site-description p {
+	color: #ffffff !important;
+	opacity: 0.92;
+	text-shadow: 0 1px 1px rgba( 0, 0, 0, 0.12 );
+}
+
+/* Mantiene el eslogan legible y cercano al logo. */
+body.nb-core .site-description {
+	margin-top: 0.65rem;
+	margin-bottom: 0;
+	max-width: 36rem;
+	font-weight: 500;
+	line-height: 1.45;
+}
+
+@media ( max-width: 767px ) {
+	body.nb-core .site-description {
+		margin-top: 0.45rem;
+		font-size: 0.9rem;
+	}
+}

@@ -1,65 +1,45 @@
 /*
  * Ticker continuo de Ultimas Noticias.
- * Complementa el marquee nativo de NewsExo con un bucle fluido y accesible.
+ * El movimiento lo controla ticker.js mediante scrollLeft para evitar
+ * conflictos con las animaciones nativas de NewsExo.
  */
 
 body.nb-core .trending-news-area .news-marquee-wrapper {
-	overflow: hidden;
+	overflow: hidden !important;
 	position: relative;
+	scroll-behavior: auto;
 }
 
 body.nb-core .trending-news-area .news-highlights.nb-ticker-activo {
-	display: inline-flex;
+	display: inline-flex !important;
 	align-items: center;
-	width: max-content;
-	min-width: max-content;
-	max-width: none;
-	animation-name: nb-core-ticker !important;
-	animation-duration: var( --nb-ticker-duration, 28s ) !important;
-	animation-timing-function: linear !important;
-	animation-iteration-count: infinite !important;
-	animation-delay: 0s !important;
-	animation-play-state: running;
-	will-change: transform;
+	width: max-content !important;
+	min-width: max-content !important;
+	max-width: none !important;
+	transform: none !important;
+	animation: none !important;
+	white-space: nowrap;
 }
 
 body.nb-core .trending-news-area .news-highlights.nb-ticker-activo .news-headline-post {
 	flex: 0 0 auto;
+	white-space: nowrap;
 }
 
-body.nb-core .trending-news-area .news-marquee-wrapper:hover .news-highlights.nb-ticker-activo,
-body.nb-core .trending-news-area .news-marquee-wrapper:focus-within .news-highlights.nb-ticker-activo {
-	animation-play-state: paused !important;
-}
-
-@keyframes nb-core-ticker {
-	from {
-		transform: translate3d( 0, 0, 0 );
-	}
-
-	to {
-		transform: translate3d( calc( -1 * var( --nb-ticker-distance, 50% ) ), 0, 0 );
-	}
+body.nb-core .trending-news-area .news-highlights.nb-ticker-activo .news-headline-post-content,
+body.nb-core .trending-news-area .news-highlights.nb-ticker-activo .news-headline-post-title {
+	white-space: nowrap;
 }
 
 @media ( max-width: 767px ) {
-	body.nb-core .trending-news-area .news-highlights.nb-ticker-activo {
-		--nb-ticker-duration: 22s;
-	}
-
 	body.nb-core .trending-news-area .news-headline-post {
 		padding-right: 1.5rem;
 	}
 }
 
 @media ( prefers-reduced-motion: reduce ) {
-	body.nb-core .trending-news-area .news-highlights.nb-ticker-activo {
-		animation: none !important;
-		transform: none !important;
-	}
-
 	body.nb-core .trending-news-area .news-marquee-wrapper {
-		overflow-x: auto;
+		overflow-x: auto !important;
 		scrollbar-width: thin;
 	}
 }
