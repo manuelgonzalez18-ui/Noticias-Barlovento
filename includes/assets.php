@@ -46,9 +46,18 @@ function nb_core_encolar_assets() {
 		nb_core_version_asset( 'assets/css/site.css' )
 	);
 
+	if ( function_exists( 'nb_core_portada_esta_activa' ) && nb_core_portada_esta_activa() ) {
+		wp_enqueue_style(
+			'nb-core-portada',
+			NB_CORE_URL . 'assets/css/portada.css',
+			array( 'nb-core-site' ),
+			nb_core_version_asset( 'assets/css/portada.css' )
+		);
+	}
+
 	/*
-	 * El JS propio sigue desactivado por defecto: la primera fase del rediseno
-	 * se resuelve con PHP y CSS para no agregar coste de ejecucion al navegador.
+	 * El JS propio sigue desactivado por defecto: la portada editorial se
+	 * resuelve con PHP y CSS para no agregar coste de ejecucion al navegador.
 	 */
 	/*
 	wp_enqueue_script(
