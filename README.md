@@ -1,6 +1,6 @@
 # Noticias Barlovento Core
 
-Plugin con las personalizaciones propias de [noticiasbarlovento.com](https://noticiasbarlovento.com/wp/).
+Plugin con las personalizaciones propias de [noticiasbarlovento.com](https://noticiasbarlovento.com).
 
 Repositorio: <https://github.com/manuelgonzalez18-ui/Noticias-Barlovento>
 

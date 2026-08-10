@@ -1,7 +1,13 @@
 # Contexto del proyecto — Noticias Barlovento
 
 Portal de noticias del Municipio Brión, Estado Miranda, Venezuela.
-Sitio en producción: https://noticiasbarlovento.com/wp/
+Sitio en producción: https://noticiasbarlovento.com
+
+WordPress vive en `public_html/wp/`, pero el sitio se sirve desde la raíz del
+dominio: en la raíz hay un `index.php` que carga `wp/wp-blog-header.php`. Es la
+configuración oficial de WordPress «en su propio directorio». Por eso
+`wp-admin` sigue estando en `/wp/wp-admin` y los archivos subidos conservan la
+ruta `/wp/wp-content/uploads/`.
 
 ## Arquitectura del sitio
 
@@ -69,15 +75,16 @@ public_html/wp/wp-content/plugins/noticiasbarlovento-core/
   estático y se lleva puestos el `index.php` y el `.htaccess` de la raíz, o sea
   deshace la migración.
 
-- El sitio se está moviendo de `/wp/` a la raíz del dominio. El procedimiento
-  está en [docs/migracion-a-raiz.md](docs/migracion-a-raiz.md) y se ejecuta a
-  mano en cPanel, no por el despliegue. Hecho hasta ahora: el `.htaccess` y el
-  `index.php` de la raíz ya están puestos, y `noticiasbarlovento.com` sirve
-  WordPress. Falta archivar el sitio estático viejo y cambiar las dos URLs en
-  Ajustes → Generales.
-- Título y descripción del sitio siguen en los valores por defecto de WordPress
-  ("untitled site" / "My WordPress Blog").
+- El sitio estático viejo quedó archivado en `public_html/_sitio-viejo/`. Se
+  puede borrar cuando el portal lleve unas semanas estable. El procedimiento de
+  la mudanza, por si hay que repetirlo o revertirlo, está en
+  [docs/migracion-a-raiz.md](docs/migracion-a-raiz.md).
+- Queda por limpiar `public_html/noticiasbarlovento.com/`: es la raíz de la
+  cuenta FTP vieja `admin@noticiasbarlovento.com` y contiene los archivos de un
+  despliegue fallido. Primero eliminar esa cuenta FTP, después borrar la carpeta.
 - Alerta de Let's Encrypt en cPanel: revisar estado del certificado SSL.
+- Pendiente en SiteSEO: regenerar el sitemap y enviarlo a Google Search Console.
+  Las URLs del sitio cambiaron al mudarse a la raíz.
 
 ## Plugins ya instalados en el sitio
 
