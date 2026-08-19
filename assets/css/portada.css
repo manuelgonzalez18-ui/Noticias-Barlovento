@@ -253,6 +253,123 @@ body.nb-portada-activa main.site-main {
 	color: var( --nb-color-marca );
 }
 
+.nb-portada-publicidad {
+	margin-top: clamp( 1.5rem, 3vw, 2.25rem );
+}
+
+.nb-portada-publicidad__tarjeta {
+	display: grid;
+	grid-template-columns: minmax( 220px, 0.72fr ) minmax( 0, 1.55fr );
+	min-height: 330px;
+	overflow: hidden;
+	border: 1px solid rgba( 13, 36, 75, 0.16 );
+	border-radius: calc( var( --nb-radio ) + 4px );
+	background: linear-gradient( 125deg, #fbf6ea 0%, #ffffff 48%, #eef3fb 100% );
+	box-shadow: 0 18px 50px rgba( 15, 35, 65, 0.08 );
+	color: #102a56;
+	transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.nb-portada-publicidad__tarjeta:hover,
+.nb-portada-publicidad__tarjeta:focus-visible {
+	transform: translateY( -2px );
+	box-shadow: 0 22px 58px rgba( 15, 35, 65, 0.13 );
+}
+
+.nb-portada-publicidad__media {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: clamp( 0.9rem, 2vw, 1.35rem );
+	background: linear-gradient( 145deg, #0d2d5a, #153d73 );
+}
+
+.nb-portada-publicidad__imagen {
+	display: block;
+	width: min( 100%, 320px );
+	height: auto;
+	aspect-ratio: 2 / 3;
+	object-fit: contain;
+	border-radius: 12px;
+	box-shadow: 0 14px 34px rgba( 0, 0, 0, 0.22 );
+}
+
+.nb-portada-publicidad__contenido {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	padding: clamp( 1.5rem, 4vw, 3rem );
+}
+
+.nb-portada-publicidad__etiqueta {
+	display: inline-flex;
+	margin-bottom: 0.85rem;
+	padding: 0.28rem 0.62rem;
+	border-radius: 999px;
+	background: rgba( 186, 135, 38, 0.13 );
+	color: #8a6417;
+	font-size: 0.68rem;
+	font-weight: 850;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+.nb-portada-publicidad__titulo {
+	display: block;
+	margin: 0;
+	color: #0d2d5a;
+	font-size: clamp( 1.7rem, 3.2vw, 2.65rem );
+	font-weight: 900;
+	letter-spacing: -0.035em;
+	line-height: 1.03;
+}
+
+.nb-portada-publicidad__bajada {
+	display: block;
+	margin-top: 0.45rem;
+	color: #b1832e;
+	font-size: clamp( 1.05rem, 2vw, 1.35rem );
+	font-weight: 850;
+}
+
+.nb-portada-publicidad__niveles {
+	display: block;
+	margin-top: 1rem;
+	color: #253b5e;
+	font-size: 0.92rem;
+	font-weight: 750;
+	line-height: 1.45;
+}
+
+.nb-portada-publicidad__texto {
+	display: block;
+	max-width: 42rem;
+	margin-top: 0.75rem;
+	color: #56647a;
+	font-size: 0.92rem;
+	line-height: 1.55;
+}
+
+.nb-portada-publicidad__cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.55rem;
+	margin-top: 1.3rem;
+	padding: 0.72rem 1rem;
+	border-radius: 999px;
+	background: #0d2d5a;
+	color: #ffffff;
+	font-size: 0.82rem;
+	font-weight: 850;
+	letter-spacing: 0.01em;
+}
+
+.nb-portada-publicidad__tarjeta:hover .nb-portada-publicidad__cta,
+.nb-portada-publicidad__tarjeta:focus-visible .nb-portada-publicidad__cta {
+	background: #b1832e;
+}
+
 .nb-portada-seccion__grid--principal {
 	display: grid;
 	grid-template-columns: minmax( 0, 1.7fr ) repeat( 3, minmax( 0, 0.75fr ) );
@@ -295,6 +412,10 @@ body.nb-portada-activa main.site-main {
 
 	.nb-portada-apertura__secundarias .nb-portada-tarjeta:nth-child( n + 3 ) {
 		display: none;
+	}
+
+	.nb-portada-publicidad__tarjeta {
+		grid-template-columns: minmax( 200px, 0.82fr ) minmax( 0, 1.35fr );
 	}
 
 	.nb-portada-seccion__grid--principal {
@@ -342,6 +463,18 @@ body.nb-portada-activa main.site-main {
 		border-bottom: 0;
 	}
 
+	.nb-portada-publicidad__tarjeta {
+		grid-template-columns: minmax( 170px, 0.8fr ) minmax( 0, 1.2fr );
+	}
+
+	.nb-portada-publicidad__contenido {
+		padding: 1.4rem;
+	}
+
+	.nb-portada-publicidad__texto {
+		display: none;
+	}
+
 	.nb-portada-seccion__grid--principal {
 		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
 	}
@@ -383,14 +516,46 @@ body.nb-portada-activa main.site-main {
 	.nb-portada-seccion__cabecera {
 		align-items: center;
 	}
+
+	.nb-portada-publicidad__tarjeta {
+		grid-template-columns: 1fr;
+	}
+
+	.nb-portada-publicidad__media {
+		padding: 1rem;
+	}
+
+	.nb-portada-publicidad__imagen {
+		width: min( 100%, 360px );
+	}
+
+	.nb-portada-publicidad__contenido {
+		padding: 1.25rem 1.2rem 1.45rem;
+	}
+
+	.nb-portada-publicidad__titulo {
+		font-size: clamp( 1.5rem, 8vw, 2rem );
+	}
+
+	.nb-portada-publicidad__niveles {
+		font-size: 0.85rem;
+	}
+
+	.nb-portada-publicidad__cta {
+		width: 100%;
+		justify-content: center;
+	}
 }
 
 @media ( prefers-reduced-motion: reduce ) {
-	.nb-portada-tarjeta__imagen img {
+	.nb-portada-tarjeta__imagen img,
+	.nb-portada-publicidad__tarjeta {
 		transition: none;
 	}
 
-	.nb-portada-tarjeta:hover .nb-portada-tarjeta__imagen img {
+	.nb-portada-tarjeta:hover .nb-portada-tarjeta__imagen img,
+	.nb-portada-publicidad__tarjeta:hover,
+	.nb-portada-publicidad__tarjeta:focus-visible {
 		transform: none;
 	}
 }
