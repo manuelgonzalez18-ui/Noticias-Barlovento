@@ -31,6 +31,20 @@ $ultimas = nb_core_portada_obtener_posts(
 );
 $usados  = array_merge( $usados, wp_list_pluck( $ultimas, 'ID' ) );
 
+$publicidad_partes = array(
+	dirname( __DIR__ ) . '/assets/images/simon-rodriguez-ad-01.txt',
+	dirname( __DIR__ ) . '/assets/images/simon-rodriguez-ad-02.txt',
+	dirname( __DIR__ ) . '/assets/images/simon-rodriguez-ad-03.txt',
+	dirname( __DIR__ ) . '/assets/images/simon-rodriguez-ad-04.txt',
+);
+$publicidad_imagen = 'data:image/webp;base64,';
+
+foreach ( $publicidad_partes as $publicidad_parte ) {
+	if ( is_readable( $publicidad_parte ) ) {
+		$publicidad_imagen .= trim( (string) file_get_contents( $publicidad_parte ) );
+	}
+}
+
 $secciones_principales = array( 'Barlovento', 'Regional', 'Nacional' );
 $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
 ?>
@@ -74,6 +88,36 @@ $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
 				</ol>
 			</section>
 		<?php endif; ?>
+
+		<aside class="nb-portada-publicidad" aria-label="Publicidad">
+			<a
+				class="nb-portada-publicidad__tarjeta"
+				href="https://www.instagram.com/uep_simonrodriguez2?igsh=ajE2cWJwNHJuNm80"
+				target="_blank"
+				rel="noopener noreferrer sponsored"
+				aria-label="Ver preinscripciones de la U.E.P. Simón Rodríguez en Instagram"
+			>
+				<span class="nb-portada-publicidad__media">
+					<img
+						class="nb-portada-publicidad__imagen"
+						src="<?php echo esc_attr( $publicidad_imagen ); ?>"
+						alt="Preinscripciones abiertas en la U.E.P. Simón Rodríguez"
+						width="320"
+						height="480"
+						loading="lazy"
+						decoding="async"
+					>
+				</span>
+				<span class="nb-portada-publicidad__contenido">
+					<span class="nb-portada-publicidad__etiqueta">Publicidad</span>
+					<strong class="nb-portada-publicidad__titulo">U.E.P. Simón Rodríguez</strong>
+					<span class="nb-portada-publicidad__bajada">Preinscripciones abiertas</span>
+					<span class="nb-portada-publicidad__niveles">Maternal · Preescolar · Primaria · Media General</span>
+					<span class="nb-portada-publicidad__texto">Educación de calidad, aprendizaje, disciplina y excelencia. Cupos limitados.</span>
+					<span class="nb-portada-publicidad__cta">Ver información en Instagram <span aria-hidden="true">→</span></span>
+				</span>
+			</a>
+		</aside>
 
 		<?php foreach ( $secciones_principales as $nombre_seccion ) : ?>
 			<?php
