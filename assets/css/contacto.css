@@ -188,19 +188,26 @@ body.nb-core .nb-contacto__transparencia {
 }
 
 body.nb-core .nb-contacto__transparencia strong {
-	color: #ffffff;
+	color: #ffffff !important;
 }
 
-body.nb-core .nb-contacto__transparencia a,
-body.nb-core .nb-contacto__transparencia a:visited {
-	color: #ffffff;
+/* Mayor especificidad para impedir que el color global de enlaces sobrescriba el pie. */
+body.nb-core .nb-contacto .nb-contacto__transparencia a,
+body.nb-core .nb-contacto .nb-contacto__transparencia a:link,
+body.nb-core .nb-contacto .nb-contacto__transparencia a:visited,
+body.nb-core .nb-contacto .nb-contacto__transparencia a:hover,
+body.nb-core .nb-contacto .nb-contacto__transparencia a:focus,
+body.nb-core .nb-contacto .nb-contacto__transparencia a:active {
+	color: #ffffff !important;
 	font-weight: 700;
+}
+
+body.nb-core .nb-contacto .nb-contacto__transparencia a {
 	text-decoration: none;
 }
 
-body.nb-core .nb-contacto__transparencia a:hover,
-body.nb-core .nb-contacto__transparencia a:focus {
-	color: #ffffff;
+body.nb-core .nb-contacto .nb-contacto__transparencia a:hover,
+body.nb-core .nb-contacto .nb-contacto__transparencia a:focus {
 	text-decoration: underline;
 }
 
