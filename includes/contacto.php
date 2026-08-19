@@ -113,7 +113,7 @@ add_filter( 'wp_nav_menu_items', 'nb_core_contacto_agregar_menu', 20, 2 );
  * Renderiza la sección de contacto al final del sitio.
  */
 function nb_core_contacto_renderizar() {
-	$datos       = nb_core_contacto_datos();
+	$datos         = nb_core_contacto_datos();
 	$transparencia = function_exists( 'nb_core_transparencia_enlaces' ) ? nb_core_transparencia_enlaces() : array();
 	?>
 	<section id="contacto" class="nb-contacto" aria-labelledby="nb-contacto-titulo">
@@ -161,6 +161,10 @@ function nb_core_contacto_renderizar() {
 					<?php endforeach; ?>
 				</nav>
 			<?php endif; ?>
+
+			<footer class="nb-contacto__copyright">
+				<p>Copyright <?php echo esc_html( wp_date( 'Y' ) ); ?> Noticias Barlovento</p>
+			</footer>
 		</div>
 	</section>
 	<?php
