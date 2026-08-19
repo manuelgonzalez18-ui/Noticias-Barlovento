@@ -1,7 +1,7 @@
 /* Sección de contacto y redes oficiales. */
 body.nb-core .nb-contacto {
 	margin-top: clamp( 2rem, 5vw, 4rem );
-	padding: clamp( 2rem, 5vw, 4rem ) 1rem;
+	padding: clamp( 2rem, 5vw, 4rem ) 1rem 1.25rem;
 	background: #0a159f;
 	color: #ffffff;
 }
@@ -169,6 +169,55 @@ body.nb-core .nb-menu-contacto > a:focus {
 	background: #ff5a24 !important;
 }
 
+/* El pie del tema quedaba antes de la sección de contacto y generaba una franja azul aislada. */
+body.nb-core .site-footer,
+body.nb-core footer.footer,
+body.nb-core .site-info {
+	display: none !important;
+}
+
+body.nb-core .nb-contacto__transparencia {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.65rem 1rem;
+	margin-top: 1.5rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid rgba( 255, 255, 255, 0.22 );
+	color: #ffffff;
+}
+
+body.nb-core .nb-contacto__transparencia strong {
+	color: #ffffff;
+}
+
+body.nb-core .nb-contacto__transparencia a,
+body.nb-core .nb-contacto__transparencia a:visited {
+	color: #ffffff;
+	font-weight: 700;
+	text-decoration: none;
+}
+
+body.nb-core .nb-contacto__transparencia a:hover,
+body.nb-core .nb-contacto__transparencia a:focus {
+	color: #ffffff;
+	text-decoration: underline;
+}
+
+body.nb-core .nb-contacto__copyright {
+	margin-top: 1.35rem;
+	padding-top: 1rem;
+	border-top: 1px solid rgba( 255, 255, 255, 0.22 );
+	color: rgba( 255, 255, 255, 0.88 );
+	text-align: center;
+}
+
+body.nb-core .nb-contacto__copyright p {
+	margin: 0;
+	font-size: 0.82rem;
+	letter-spacing: 0.02em;
+}
+
 @media ( max-width: 767px ) {
 	body.nb-core .nb-contacto__grid,
 	body.nb-core .nb-contacto__redes {
@@ -182,5 +231,10 @@ body.nb-core .nb-menu-contacto > a:focus {
 	body.nb-core .nb-contacto__boton {
 		justify-content: center;
 		width: 100%;
+	}
+
+	body.nb-core .nb-contacto__transparencia {
+		align-items: flex-start;
+		flex-direction: column;
 	}
 }
