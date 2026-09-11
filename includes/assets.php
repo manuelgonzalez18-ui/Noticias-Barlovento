@@ -171,6 +171,13 @@ function nb_core_encolar_assets() {
 			nb_core_version_asset( 'assets/css/noticia.css' )
 		);
 
+		wp_enqueue_style(
+			'nb-core-publicidad',
+			NB_CORE_URL . 'assets/css/publicidad.css',
+			array( 'nb-core-noticia' ),
+			nb_core_version_asset( 'assets/css/publicidad.css' )
+		);
+
 		wp_add_inline_style(
 			'nb-core-noticia',
 			'body.nb-core.single.nb-noticia-activa .nb-noticia article.nb-noticia__articulo{background:transparent;border-radius:0;}'

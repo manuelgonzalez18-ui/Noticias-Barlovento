@@ -39,120 +39,133 @@ get_header();
 		?>
 
 		<article <?php post_class( 'nb-noticia__articulo' ); ?>>
-			<header class="nb-noticia__cabecera">
-				<nav class="nb-noticia__migas" aria-label="Ruta de navegacion">
-					<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Inicio</a>
-					<?php if ( $categoria instanceof WP_Term ) : ?>
-						<span aria-hidden="true">/</span>
-						<a href="<?php echo esc_url( get_category_link( $categoria ) ); ?>"><?php echo esc_html( $categoria->name ); ?></a>
-					<?php endif; ?>
-				</nav>
+			<?php nb_core_publicidad_render( 'superior', 'nb-publicidad--ancho' ); ?>
 
-				<div class="nb-noticia__etiquetas">
-					<span class="nb-noticia__tipo"><?php echo esc_html( $tipo ); ?></span>
-					<?php if ( '' !== $localidad ) : ?>
-						<span class="nb-noticia__localidad"><?php echo esc_html( $localidad ); ?></span>
-					<?php endif; ?>
-				</div>
-
-				<?php if ( 'patrocinado' === $tipo_clave ) : ?>
-					<p class="nb-noticia__aviso-patrocinado"><strong>Contenido patrocinado.</strong> Esta publicación tiene una relación comercial y se identifica separadamente del contenido editorial independiente.</p>
-				<?php endif; ?>
-
-				<h1 class="nb-noticia__titulo"><?php the_title(); ?></h1>
-
-				<?php if ( has_excerpt( $post_id ) ) : ?>
-					<p class="nb-noticia__bajada"><?php echo esc_html( get_the_excerpt( $post_id ) ); ?></p>
-				<?php endif; ?>
-
-				<div class="nb-noticia__firma">
-					<span>
-						Por <a rel="author" href="<?php echo esc_url( get_author_posts_url( (int) get_the_author_meta( 'ID' ) ) ); ?>"><?php echo esc_html( get_the_author() ); ?></a>
-					</span>
-					<span aria-hidden="true">·</span>
-					<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>">
-						<?php echo esc_html( get_the_date( get_option( 'date_format' ) . ' · ' . get_option( 'time_format' ) ) ); ?>
-					</time>
-					<?php if ( $mostrar_cambio ) : ?>
-						<span class="nb-noticia__actualizada">
-							Actualizado <?php echo esc_html( get_the_modified_date( get_option( 'date_format' ) . ' · ' . get_option( 'time_format' ) ) ); ?>
-						</span>
-					<?php endif; ?>
-				</div>
-			</header>
-
-			<?php if ( has_post_thumbnail( $post_id ) ) : ?>
-				<figure class="nb-noticia__principal">
-					<?php
-					echo get_the_post_thumbnail(
-						$post_id,
-						'full',
-						array(
-							'loading'       => 'eager',
-							'decoding'      => 'async',
-							'fetchpriority' => 'high',
-						)
-					);
-					?>
-					<?php if ( '' !== $pie_imagen || '' !== $credito_foto ) : ?>
-						<figcaption>
-							<?php if ( '' !== $pie_imagen ) : ?>
-								<span><?php echo esc_html( $pie_imagen ); ?></span>
+			<div class="nb-noticia__layout">
+				<div class="nb-noticia__principal-columna">
+					<header class="nb-noticia__cabecera">
+						<nav class="nb-noticia__migas" aria-label="Ruta de navegacion">
+							<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Inicio</a>
+							<?php if ( $categoria instanceof WP_Term ) : ?>
+								<span aria-hidden="true">/</span>
+								<a href="<?php echo esc_url( get_category_link( $categoria ) ); ?>"><?php echo esc_html( $categoria->name ); ?></a>
 							<?php endif; ?>
-							<?php if ( '' !== $credito_foto ) : ?>
-								<span class="nb-noticia__credito">Foto: <?php echo esc_html( $credito_foto ); ?></span>
+						</nav>
+
+						<div class="nb-noticia__etiquetas">
+							<span class="nb-noticia__tipo"><?php echo esc_html( $tipo ); ?></span>
+							<?php if ( '' !== $localidad ) : ?>
+								<span class="nb-noticia__localidad"><?php echo esc_html( $localidad ); ?></span>
 							<?php endif; ?>
-						</figcaption>
+						</div>
+
+						<?php if ( 'patrocinado' === $tipo_clave ) : ?>
+							<p class="nb-noticia__aviso-patrocinado"><strong>Contenido patrocinado.</strong> Esta publicación tiene una relación comercial y se identifica separadamente del contenido editorial independiente.</p>
+						<?php endif; ?>
+
+						<h1 class="nb-noticia__titulo"><?php the_title(); ?></h1>
+
+						<?php if ( has_excerpt( $post_id ) ) : ?>
+							<p class="nb-noticia__bajada"><?php echo esc_html( get_the_excerpt( $post_id ) ); ?></p>
+						<?php endif; ?>
+
+						<div class="nb-noticia__firma">
+							<span>
+								Por <a rel="author" href="<?php echo esc_url( get_author_posts_url( (int) get_the_author_meta( 'ID' ) ) ); ?>"><?php echo esc_html( get_the_author() ); ?></a>
+							</span>
+							<span aria-hidden="true">·</span>
+							<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>">
+								<?php echo esc_html( get_the_date( get_option( 'date_format' ) . ' · ' . get_option( 'time_format' ) ) ); ?>
+							</time>
+							<?php if ( $mostrar_cambio ) : ?>
+								<span class="nb-noticia__actualizada">
+									Actualizado <?php echo esc_html( get_the_modified_date( get_option( 'date_format' ) . ' · ' . get_option( 'time_format' ) ) ); ?>
+								</span>
+							<?php endif; ?>
+						</div>
+					</header>
+
+					<?php if ( has_post_thumbnail( $post_id ) ) : ?>
+						<figure class="nb-noticia__principal">
+							<?php
+							echo get_the_post_thumbnail(
+								$post_id,
+								'full',
+								array(
+									'loading'       => 'eager',
+									'decoding'      => 'async',
+									'fetchpriority' => 'high',
+								)
+							);
+							?>
+							<?php if ( '' !== $pie_imagen || '' !== $credito_foto ) : ?>
+								<figcaption>
+									<?php if ( '' !== $pie_imagen ) : ?>
+										<span><?php echo esc_html( $pie_imagen ); ?></span>
+									<?php endif; ?>
+									<?php if ( '' !== $credito_foto ) : ?>
+										<span class="nb-noticia__credito">Foto: <?php echo esc_html( $credito_foto ); ?></span>
+									<?php endif; ?>
+								</figcaption>
+							<?php endif; ?>
+						</figure>
 					<?php endif; ?>
-				</figure>
-			<?php endif; ?>
 
-			<div class="nb-noticia__cuerpo">
-				<?php the_content(); ?>
-				<?php
-				wp_link_pages(
-					array(
-						'before' => '<nav class="nb-noticia__paginas">',
-						'after'  => '</nav>',
-					)
-				);
-				?>
-			</div>
-
-			<?php if ( '' !== $nota_correccion ) : ?>
-				<aside class="nb-noticia__nota-correccion" aria-label="Corrección o actualización">
-					<strong>Corrección / actualización</strong>
-					<p><?php echo esc_html( $nota_correccion ); ?></p>
-				</aside>
-			<?php endif; ?>
-
-			<footer class="nb-noticia__pie-editorial">
-				<div class="nb-noticia__fuente">
-					<strong>Fuente</strong>
-					<span><?php echo esc_html( $fuente_visible ); ?></span>
-					<?php if ( '' !== $url_original ) : ?>
-						<a href="<?php echo esc_url( $url_original ); ?>" target="_blank" rel="noopener noreferrer">Ver fuente original</a>
-					<?php endif; ?>
-				</div>
-
-				<?php if ( ! empty( $categorias ) ) : ?>
-					<div class="nb-noticia__categorias" aria-label="Categorias">
-						<?php foreach ( $categorias as $categoria_item ) : ?>
-							<a href="<?php echo esc_url( get_category_link( $categoria_item ) ); ?>"><?php echo esc_html( $categoria_item->name ); ?></a>
-						<?php endforeach; ?>
+					<div class="nb-noticia__cuerpo">
+						<?php the_content(); ?>
+						<?php
+						wp_link_pages(
+							array(
+								'before' => '<nav class="nb-noticia__paginas">',
+								'after'  => '</nav>',
+							)
+						);
+						?>
 					</div>
-				<?php endif; ?>
-			</footer>
 
-			<section class="nb-noticia__acciones" aria-labelledby="nb-compartir-titulo">
-				<h2 id="nb-compartir-titulo">Compartir esta noticia</h2>
-				<div class="nb-noticia__compartir">
-					<a href="<?php echo esc_url( 'https://wa.me/?text=' . rawurlencode( $titulo_compartir . ' ' . $url_actual ) ); ?>" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-					<a href="<?php echo esc_url( 'https://www.facebook.com/sharer/sharer.php?u=' . rawurlencode( $url_actual ) ); ?>" target="_blank" rel="noopener noreferrer">Facebook</a>
-					<a href="<?php echo esc_url( 'https://t.me/share/url?url=' . rawurlencode( $url_actual ) . '&text=' . rawurlencode( $titulo_compartir ) ); ?>" target="_blank" rel="noopener noreferrer">Telegram</a>
+					<?php if ( '' !== $nota_correccion ) : ?>
+						<aside class="nb-noticia__nota-correccion" aria-label="Corrección o actualización">
+							<strong>Corrección / actualización</strong>
+							<p><?php echo esc_html( $nota_correccion ); ?></p>
+						</aside>
+					<?php endif; ?>
+
+					<footer class="nb-noticia__pie-editorial">
+						<div class="nb-noticia__fuente">
+							<strong>Fuente</strong>
+							<span><?php echo esc_html( $fuente_visible ); ?></span>
+							<?php if ( '' !== $url_original ) : ?>
+								<a href="<?php echo esc_url( $url_original ); ?>" target="_blank" rel="noopener noreferrer">Ver fuente original</a>
+							<?php endif; ?>
+						</div>
+
+						<?php if ( ! empty( $categorias ) ) : ?>
+							<div class="nb-noticia__categorias" aria-label="Categorias">
+								<?php foreach ( $categorias as $categoria_item ) : ?>
+									<a href="<?php echo esc_url( get_category_link( $categoria_item ) ); ?>"><?php echo esc_html( $categoria_item->name ); ?></a>
+								<?php endforeach; ?>
+							</div>
+						<?php endif; ?>
+					</footer>
+
+					<section class="nb-noticia__acciones" aria-labelledby="nb-compartir-titulo">
+						<h2 id="nb-compartir-titulo">Compartir esta noticia</h2>
+						<div class="nb-noticia__compartir">
+							<a href="<?php echo esc_url( 'https://wa.me/?text=' . rawurlencode( $titulo_compartir . ' ' . $url_actual ) ); ?>" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+							<a href="<?php echo esc_url( 'https://www.facebook.com/sharer/sharer.php?u=' . rawurlencode( $url_actual ) ); ?>" target="_blank" rel="noopener noreferrer">Facebook</a>
+							<a href="<?php echo esc_url( 'https://t.me/share/url?url=' . rawurlencode( $url_actual ) . '&text=' . rawurlencode( $titulo_compartir ) ); ?>" target="_blank" rel="noopener noreferrer">Telegram</a>
+						</div>
+						<a class="nb-noticia__correccion" href="<?php echo esc_url( $url_contacto ); ?>">Solicitar una correccion</a>
+					</section>
+
+					<?php nb_core_publicidad_render( 'inferior' ); ?>
 				</div>
-				<a class="nb-noticia__correccion" href="<?php echo esc_url( $url_contacto ); ?>">Solicitar una correccion</a>
-			</section>
+
+				<aside class="nb-noticia__publicidad-lateral" aria-label="Publicidad lateral">
+					<?php nb_core_publicidad_render( 'lateral_1' ); ?>
+					<?php nb_core_publicidad_render( 'lateral_2' ); ?>
+				</aside>
+			</div>
 
 			<?php if ( ! empty( $relacionadas ) ) : ?>
 				<section class="nb-noticia__relacionadas" aria-labelledby="nb-relacionadas-titulo">
