@@ -31,9 +31,18 @@ $ultimas = nb_core_portada_obtener_posts(
 );
 $usados  = array_merge( $usados, wp_list_pluck( $ultimas, 'ID' ) );
 
-// La copia alojada en GitHub se usa como origen estable para evitar fallos de
-// sincronizacion binaria del WebP en el despliegue FTP del plugin.
-$publicidad_imagen = 'https://raw.githubusercontent.com/manuelgonzalez18-ui/Noticias-Barlovento/main/assets/images/pescados-rs.webp';
+// Incrusta el WebP directamente desde el archivo del plugin para evitar
+// bloqueos externos o problemas de MIME/ruta al servir la imagen.
+$publicidad_imagen_archivo = NB_CORE_PATH . 'assets/images/pescados-rs.webp';
+$publicidad_imagen         = '';
+
+if ( is_readable( $publicidad_imagen_archivo ) ) {
+	$publicidad_imagen_binaria = file_get_contents( $publicidad_imagen_archivo );
+
+	if ( false !== $publicidad_imagen_binaria && '' !== $publicidad_imagen_binaria ) {
+		$publicidad_imagen = 'data:image/webp;base64,' . base64_encode( $publicidad_imagen_binaria );
+	}
+}
 
 $secciones_principales = array( 'Barlovento', 'Regional', 'Nacional' );
 $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
@@ -88,16 +97,18 @@ $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
 				aria-label="Contactar a Pescados RS por WhatsApp"
 			>
 				<span class="nb-portada-publicidad__media">
-					<img
-						class="nb-portada-publicidad__imagen"
-						src="<?php echo esc_url( $publicidad_imagen ); ?>"
-						alt="Pescados RS en Tacarigua de la Laguna: pescado fresco, camarones y mezcla para paellas"
-						width="1200"
-						height="1200"
-						loading="lazy"
-						decoding="async"
-						style="aspect-ratio: 1 / 1;"
-					>
+					<?php if ( '' !== $publicidad_imagen ) : ?>
+						<img
+							class="nb-portada-publicidad__imagen"
+							src="<?php echo esc_attr( $publicidad_imagen ); ?>"
+							alt="Pescados RS en Tacarigua de la Laguna: pescado fresco, camarones y mezcla para paellas"
+							width="1200"
+							height="1200"
+							loading="lazy"
+							decoding="async"
+							style="aspect-ratio: 1 / 1;"
+						>
+					<?php endif; ?>
 				</span>
 				<span class="nb-portada-publicidad__contenido">
 					<span class="nb-portada-publicidad__etiqueta">Publicidad</span>
