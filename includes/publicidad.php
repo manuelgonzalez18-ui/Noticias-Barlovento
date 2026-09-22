@@ -149,7 +149,17 @@ function nb_core_publicidad_html( $espacio, $clase = '' ) {
 
 	$valores = get_option( 'nb_core_publicidad', array() );
 	$codigo  = isset( $valores[ $espacio ] ) ? trim( (string) $valores[ $espacio ] ) : '';
-	$clases  = trim( 'nb-publicidad nb-publicidad--' . sanitize_html_class( $espacio ) . ' ' . $clase );
+
+	if ( 'lateral_1' === $espacio ) {
+		$imagen_pescados = esc_url( NB_CORE_URL . 'assets/images/pescados-rs-lateral.jpg?v=1' );
+		$codigo          = sprintf(
+			'<a href="%1$s" target="_blank" rel="noopener noreferrer sponsored" aria-label="Contactar a Pescados RS por WhatsApp"><img src="%2$s" alt="Pescados RS - El pescado más fresco" width="260" height="260" loading="eager" decoding="async" style="display:block;width:100%%;height:auto;object-fit:contain;background:#fff;"></a>',
+			esc_url( 'https://wa.me/qr/CJJQQ7PKHVBLO1' ),
+			$imagen_pescados
+		);
+	}
+
+	$clases = trim( 'nb-publicidad nb-publicidad--' . sanitize_html_class( $espacio ) . ' ' . $clase );
 
 	ob_start();
 	?>
@@ -157,7 +167,7 @@ function nb_core_publicidad_html( $espacio, $clase = '' ) {
 		<span class="nb-publicidad__etiqueta">Publicidad</span>
 		<div class="nb-publicidad__contenido">
 			<?php if ( '' !== $codigo ) : ?>
-				<?php echo $codigo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Contenido administrado por usuarios con permisos. ?>
+				<?php echo $codigo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Contenido administrado o controlado por el plugin. ?>
 			<?php else : ?>
 				<div class="nb-publicidad__vacio">
 					<strong>Espacio publicitario disponible</strong>
@@ -204,9 +214,9 @@ function nb_core_publicidad_insertar_en_contenido( $contenido ) {
 		return $contenido . $publicidad;
 	}
 
-	$resultado       = '';
+	$resultado          = '';
 	$parrafos_cerrados = 0;
-	$insertado       = false;
+	$insertado          = false;
 
 	foreach ( $partes as $parte ) {
 		$resultado .= $parte;
