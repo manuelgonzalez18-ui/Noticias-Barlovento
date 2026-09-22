@@ -31,9 +31,6 @@ $ultimas = nb_core_portada_obtener_posts(
 );
 $usados  = array_merge( $usados, wp_list_pluck( $ultimas, 'ID' ) );
 
-$publicidad_imagen_b64 = @file_get_contents( NB_CORE_PATH . 'assets/images/pescados-rs-fixed.b64' );
-$publicidad_imagen = $publicidad_imagen_b64 ? 'data:image/jpeg;base64,' . trim( $publicidad_imagen_b64 ) : '';
-
 $secciones_principales = array( 'Barlovento', 'Regional', 'Nacional' );
 $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
 ?>
@@ -77,39 +74,6 @@ $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
 				</ol>
 			</section>
 		<?php endif; ?>
-
-		<aside class="nb-portada-publicidad" aria-label="Publicidad">
-			<a
-				class="nb-portada-publicidad__tarjeta"
-				href="https://wa.me/qr/CJJQQ7PKHVBLO1"
-				target="_blank"
-				rel="noopener noreferrer sponsored"
-				aria-label="Contactar a Pescados RS por WhatsApp"
-			>
-				<span class="nb-portada-publicidad__media">
-					<?php if ( $publicidad_imagen ) : ?>
-						<img
-							class="nb-portada-publicidad__imagen"
-							src="<?php echo esc_attr( $publicidad_imagen ); ?>"
-							alt="Pescados RS en Tacarigua de la Laguna: pescado fresco, camarones y mezcla para paellas"
-							width="500"
-							height="500"
-							loading="eager"
-							decoding="async"
-							style="aspect-ratio: 1 / 1; object-fit: cover; width: 100%; height: 100%;"
-						>
-					<?php endif; ?>
-				</span>
-				<span class="nb-portada-publicidad__contenido">
-					<span class="nb-portada-publicidad__etiqueta">Publicidad</span>
-					<strong class="nb-portada-publicidad__titulo">Pescados RS</strong>
-					<span class="nb-portada-publicidad__bajada">El pescado más fresco</span>
-					<span class="nb-portada-publicidad__niveles">Lebranche · Róbalo · Curvina · Cojinúa · Pargo · Medregal · Camarones</span>
-					<span class="nb-portada-publicidad__texto">Pescados y mariscos frescos en Tacarigua de la Laguna. También mezcla para paellas.</span>
-					<span class="nb-portada-publicidad__cta">Contactar por WhatsApp <span aria-hidden="true">→</span></span>
-				</span>
-			</a>
-		</aside>
 
 		<?php foreach ( $secciones_principales as $nombre_seccion ) : ?>
 			<?php
