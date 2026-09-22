@@ -62,7 +62,7 @@ function nb_core_publicidad_local_predeterminada( $valor ) {
 	}
 
 	if ( empty( $valor['lateral_2'] ) ) {
-		$imagen_kenia = plugin_dir_url( dirname( __DIR__ ) . '/noticiasbarlovento-core.php' ) . 'assets/images/kenia-rangel-diseno-grafico-300.webp';
+		$imagen_kenia = NB_CORE_URL . 'assets/images/kenia-rangel-diseno-grafico-300.webp';
 		$valor['lateral_2'] = sprintf(
 			'<a class="nb-anuncio-local" href="%1$s" target="_blank" rel="noopener noreferrer sponsored" aria-label="Contactar a Kenia Rangel, diseñadora gráfica, por WhatsApp"><img src="%2$s" alt="Kenia Rangel, diseñadora gráfica: banners, tarjetas, flyers, logotipos y material POP" width="300" height="200" loading="lazy" decoding="async" style="display:block;width:100%%;height:auto;object-fit:contain;"></a>',
 			esc_url( 'https://wa.me/message/AODEYZT5B7ZWK1' ),
@@ -73,3 +73,4 @@ function nb_core_publicidad_local_predeterminada( $valor ) {
 	return $valor;
 }
 add_filter( 'option_nb_core_publicidad', 'nb_core_publicidad_local_predeterminada' );
+add_filter( 'default_option_nb_core_publicidad', 'nb_core_publicidad_local_predeterminada' );
