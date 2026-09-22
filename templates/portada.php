@@ -31,17 +31,21 @@ $ultimas = nb_core_portada_obtener_posts(
 );
 $usados  = array_merge( $usados, wp_list_pluck( $ultimas, 'ID' ) );
 
-$publicidad_partes = array(
-	dirname( __DIR__ ) . '/assets/images/simon-rodriguez-ad-01.txt',
-	dirname( __DIR__ ) . '/assets/images/simon-rodriguez-ad-02.txt',
-	dirname( __DIR__ ) . '/assets/images/simon-rodriguez-ad-03.txt',
-	dirname( __DIR__ ) . '/assets/images/simon-rodriguez-ad-04.txt',
+$publicidad_archivos = array(
+	'abrahany' => dirname( __DIR__ ) . '/assets/images/abrahany-studio-nails.webp.txt',
+	'kenia'    => dirname( __DIR__ ) . '/assets/images/kenia-rangel-diseno-grafico.webp.txt',
 );
-$publicidad_imagen = 'data:image/webp;base64,';
+$publicidad_imagenes = array();
 
-foreach ( $publicidad_partes as $publicidad_parte ) {
-	if ( is_readable( $publicidad_parte ) ) {
-		$publicidad_imagen .= trim( (string) file_get_contents( $publicidad_parte ) );
+foreach ( $publicidad_archivos as $publicidad_clave => $publicidad_archivo ) {
+	$publicidad_imagenes[ $publicidad_clave ] = '';
+
+	if ( is_readable( $publicidad_archivo ) ) {
+		$publicidad_base64 = trim( (string) file_get_contents( $publicidad_archivo ) );
+
+		if ( '' !== $publicidad_base64 ) {
+			$publicidad_imagenes[ $publicidad_clave ] = 'data:image/webp;base64,' . $publicidad_base64;
+		}
 	}
 }
 
@@ -89,35 +93,97 @@ $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
 			</section>
 		<?php endif; ?>
 
-		<aside class="nb-portada-publicidad" aria-label="Publicidad">
-			<a
-				class="nb-portada-publicidad__tarjeta"
-				href="https://www.instagram.com/uep_simonrodriguez2?igsh=ajE2cWJwNHJuNm80"
-				target="_blank"
-				rel="noopener noreferrer sponsored"
-				aria-label="Ver preinscripciones de la U.E.P. Simón Rodríguez en Instagram"
-			>
-				<span class="nb-portada-publicidad__media">
-					<img
-						class="nb-portada-publicidad__imagen"
-						src="<?php echo esc_attr( $publicidad_imagen ); ?>"
-						alt="Preinscripciones abiertas en la U.E.P. Simón Rodríguez"
-						width="320"
-						height="480"
-						loading="lazy"
-						decoding="async"
-					>
-				</span>
-				<span class="nb-portada-publicidad__contenido">
-					<span class="nb-portada-publicidad__etiqueta">Publicidad</span>
-					<strong class="nb-portada-publicidad__titulo">U.E.P. Simón Rodríguez</strong>
-					<span class="nb-portada-publicidad__bajada">Preinscripciones abiertas</span>
-					<span class="nb-portada-publicidad__niveles">Maternal · Preescolar · Primaria · Media General</span>
-					<span class="nb-portada-publicidad__texto">Educación de calidad, aprendizaje, disciplina y excelencia. Cupos limitados.</span>
-					<span class="nb-portada-publicidad__cta">Ver información en Instagram <span aria-hidden="true">→</span></span>
-				</span>
-			</a>
-		</aside>
+		<?php if ( ! empty( $publicidad_imagenes['abrahany'] ) || ! empty( $publicidad_imagenes['kenia'] ) ) : ?>
+			<style>
+				.nb-portada-publicidad__grid {
+					display: grid;
+					grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+					gap: clamp( 0.85rem, 2vw, 1.25rem );
+				}
+
+				.nb-portada-publicidad__anuncio {
+					display: block;
+					overflow: hidden;
+					border: 1px solid rgba( 13, 36, 75, 0.14 );
+					border-radius: calc( var( --nb-radio ) + 4px );
+					background: #ffffff;
+					box-shadow: 0 14px 36px rgba( 15, 35, 65, 0.09 );
+					transition: transform 180ms ease, box-shadow 180ms ease;
+				}
+
+				.nb-portada-publicidad__anuncio:hover,
+				.nb-portada-publicidad__anuncio:focus-visible {
+					transform: translateY( -2px );
+					box-shadow: 0 18px 44px rgba( 15, 35, 65, 0.15 );
+				}
+
+				.nb-portada-publicidad__anuncio img {
+					display: block;
+					width: 100%;
+					height: auto;
+					aspect-ratio: 3 / 2;
+					object-fit: cover;
+				}
+
+				@media ( max-width: 700px ) {
+					.nb-portada-publicidad__grid {
+						grid-template-columns: 1fr;
+					}
+				}
+
+				@media ( prefers-reduced-motion: reduce ) {
+					.nb-portada-publicidad__anuncio {
+						transition: none;
+					}
+					.nb-portada-publicidad__anuncio:hover,
+					.nb-portada-publicidad__anuncio:focus-visible {
+						transform: none;
+					}
+				}
+			</style>
+
+			<aside class="nb-portada-publicidad" aria-label="Publicidad">
+				<div class="nb-portada-publicidad__grid">
+					<?php if ( ! empty( $publicidad_imagenes['abrahany'] ) ) : ?>
+						<a
+							class="nb-portada-publicidad__anuncio"
+							href="https://wa.me/qr/LRVX44AB262ZP1"
+							target="_blank"
+							rel="noopener noreferrer sponsored"
+							aria-label="Contactar a Abrahany Studio Nails por WhatsApp"
+						>
+							<img
+								src="<?php echo esc_attr( $publicidad_imagenes['abrahany'] ); ?>"
+								alt="Abrahany Studio Nails: servicios de uñas, cejas y pestañas"
+								width="360"
+								height="240"
+								loading="lazy"
+								decoding="async"
+							>
+						</a>
+					<?php endif; ?>
+
+					<?php if ( ! empty( $publicidad_imagenes['kenia'] ) ) : ?>
+						<a
+							class="nb-portada-publicidad__anuncio"
+							href="https://wa.me/message/AODEYZT5B7ZWK1"
+							target="_blank"
+							rel="noopener noreferrer sponsored"
+							aria-label="Contactar a Kenia Rangel, diseñadora gráfica, por WhatsApp"
+						>
+							<img
+								src="<?php echo esc_attr( $publicidad_imagenes['kenia'] ); ?>"
+								alt="Kenia Rangel, diseñadora gráfica: banners, tarjetas, flyers, logotipos y material POP"
+								width="360"
+								height="240"
+								loading="lazy"
+								decoding="async"
+							>
+						</a>
+					<?php endif; ?>
+				</div>
+			</aside>
+		<?php endif; ?>
 
 		<?php foreach ( $secciones_principales as $nombre_seccion ) : ?>
 			<?php
