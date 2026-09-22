@@ -31,7 +31,7 @@ $ultimas = nb_core_portada_obtener_posts(
 );
 $usados  = array_merge( $usados, wp_list_pluck( $ultimas, 'ID' ) );
 
-$publicidad_imagen_b64 = @file_get_contents( NB_CORE_PATH . 'assets/images/pescados-rs-01.b64' );
+$publicidad_imagen_b64 = @file_get_contents( NB_CORE_PATH . 'assets/images/pescados-rs-full.b64' );
 $publicidad_imagen = $publicidad_imagen_b64 ? 'data:image/jpeg;base64,' . trim( $publicidad_imagen_b64 ) : '';
 
 $secciones_principales = array( 'Barlovento', 'Regional', 'Nacional' );
