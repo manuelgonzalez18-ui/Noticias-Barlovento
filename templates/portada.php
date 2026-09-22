@@ -31,7 +31,8 @@ $ultimas = nb_core_portada_obtener_posts(
 );
 $usados  = array_merge( $usados, wp_list_pluck( $ultimas, 'ID' ) );
 
-$publicidad_imagen = NB_CORE_URL . 'assets/images/pescados-rs-correcto.webp?v=2';
+$publicidad_imagen_b64 = @file_get_contents( NB_CORE_PATH . 'assets/images/pescados-rs-01.b64' );
+$publicidad_imagen = $publicidad_imagen_b64 ? 'data:image/jpeg;base64,' . trim( $publicidad_imagen_b64 ) : '';
 
 $secciones_principales = array( 'Barlovento', 'Regional', 'Nacional' );
 $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
@@ -86,16 +87,18 @@ $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
 				aria-label="Contactar a Pescados RS por WhatsApp"
 			>
 				<span class="nb-portada-publicidad__media">
-					<img
-						class="nb-portada-publicidad__imagen"
-						src="<?php echo esc_attr( $publicidad_imagen ); ?>"
-						alt="Pescados RS en Tacarigua de la Laguna: pescado fresco, camarones y mezcla para paellas"
-						width="360"
-						height="360"
-						loading="lazy"
-						decoding="async"
-						style="aspect-ratio: 1 / 1;"
-					>
+					<?php if ( $publicidad_imagen ) : ?>
+						<img
+							class="nb-portada-publicidad__imagen"
+							src="<?php echo esc_attr( $publicidad_imagen ); ?>"
+							alt="Pescados RS en Tacarigua de la Laguna: pescado fresco, camarones y mezcla para paellas"
+							width="500"
+							height="500"
+							loading="eager"
+							decoding="async"
+							style="aspect-ratio: 1 / 1; object-fit: cover; width: 100%; height: 100%;"
+						>
+					<?php endif; ?>
 				</span>
 				<span class="nb-portada-publicidad__contenido">
 					<span class="nb-portada-publicidad__etiqueta">Publicidad</span>
