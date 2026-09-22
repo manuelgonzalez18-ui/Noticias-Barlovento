@@ -31,7 +31,7 @@ $ultimas = nb_core_portada_obtener_posts(
 );
 $usados  = array_merge( $usados, wp_list_pluck( $ultimas, 'ID' ) );
 
-$publicidad_imagen = NB_CORE_URL . 'assets/images/pescados-rs-first.webp?v=1';
+$publicidad_imagen = NB_CORE_URL . 'assets/images/pescados-rs-correcto.webp?v=2';
 
 $secciones_principales = array( 'Barlovento', 'Regional', 'Nacional' );
 $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
