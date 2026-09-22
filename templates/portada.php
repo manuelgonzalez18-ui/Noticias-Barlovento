@@ -31,7 +31,9 @@ $ultimas = nb_core_portada_obtener_posts(
 );
 $usados  = array_merge( $usados, wp_list_pluck( $ultimas, 'ID' ) );
 
-$publicidad_imagen = NB_CORE_URL . 'assets/images/pescados-rs.webp';
+// La copia alojada en GitHub se usa como origen estable para evitar fallos de
+// sincronizacion binaria del WebP en el despliegue FTP del plugin.
+$publicidad_imagen = 'https://raw.githubusercontent.com/manuelgonzalez18-ui/Noticias-Barlovento/main/assets/images/pescados-rs.webp';
 
 $secciones_principales = array( 'Barlovento', 'Regional', 'Nacional' );
 $secciones_servicio    = array( 'Cultura', 'Deporte', 'Salud', 'Turismo' );
