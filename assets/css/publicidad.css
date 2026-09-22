@@ -109,6 +109,7 @@
 
 .nb-publicidad--lateral_2 .nb-publicidad__contenido {
 	min-height: 600px;
+	align-items: flex-start;
 }
 
 .nb-publicidad--lateral_1 .nb-publicidad__vacio {
